@@ -40,18 +40,15 @@ class _AuthScreenState extends State<AuthScreen> {
                     // Auth form for login or signup
                     AnimatedSwitcher(
                       duration: const Duration(milliseconds: 200),
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) {
-                        return SlideTransition(
-                          position: Tween<Offset>(
-                            begin: const Offset(-1, 0),
-                            end: Offset.zero,
-                          ).animate(animation),
+                      transitionBuilder: (Widget child, Animation<double> animation) {
+                        return FadeTransition(
+                          opacity: animation,
                           child: child,
                         );
                       },
                       child: _buildAuthForm(),
-                    ),
+                    )
+
                   ],
                 ),
               ),
@@ -73,170 +70,178 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget _buildAuthForm() {
     switch (currentAuthState) {
       case AuthState.signup:
-        return Column(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Create a New \nAccount',
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Create an account and get started',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ),
-            const SizedBox(height: 20),
-            TextFormField(
-              controller: _nameController,
-              decoration: InputDecoration(
-                labelText: 'Name',
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-              ),
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8.00),
-              child: SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                    onPressed: () async {
-                      setState(() {
-                        _isLoading = true; // Start loading
-                      });
-                      await authService.signUp(_nameController, _emailController);
-                      setState(() {
-                        _isLoading = false; // Start loading
-                      });
-                    },
-                    child: const Text('Continue')),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(18.0),
-              child: Text('or continue with'),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text('Google'),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    currentAuthState = AuthState.login; // Switch to login
-                  });
-                },
-                child: RichText(
-                  text: TextSpan(
-                    text:
-                        'Already have an account?? ', // First part of the text
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium, // Style for the first part
-                    children: const <TextSpan>[
-                      TextSpan(
-                          text: 'LogIn',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ],
-                  ),
+        return SizedBox(
+          key: const ValueKey<AuthState>(AuthState.signup),
+          height: 650,
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Create a New \nAccount',
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
               ),
-            )
-          ],
+              const SizedBox(height: 10),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Create an account and get started',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: _nameController,
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                  border:
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border:
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.00),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          _isLoading = true; // Start loading
+                        });
+                        await authService.signUp(_nameController, _emailController);
+                        setState(() {
+                          _isLoading = false; // Start loading
+                        });
+                      },
+                      child: const Text('Continue')),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(18.0),
+                child: Text('or continue with'),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Google'),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      currentAuthState = AuthState.login; // Switch to login
+                    });
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      text:
+                          'Already have an account?? ', // First part of the text
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium, // Style for the first part
+                      children: const <TextSpan>[
+                        TextSpan(
+                            text: 'LogIn',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         );
 
       case AuthState.login:
-        return Column(
-          children: [
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Sign in into your\naccount',
-                style: Theme.of(context).textTheme.headlineLarge,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Login to your account',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ),
-            const SizedBox(height: 20),
-            TextFormField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-              ),
-            ),
-            const SizedBox(height: 10),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child:
-                  ElevatedButton(onPressed: () async {
-                    setState(() {
-                      _isLoading = true; // Start loading
-                    });
-                    String response = await authService.logIn(_emailController);
-                    showToast(response);
-                    setState(() {
-                      _isLoading = false; // Start loading
-                    });
-                  }, child: const Text('Login')),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(18.0),
-              child: Text('or continue with'),
-            ),
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text('Google'),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: GestureDetector(
-                onTap: () {
-                  setState(() {
-                    currentAuthState = AuthState.signup; // Switch to signup
-                  });
-                },
-                child: RichText(
-                  text: TextSpan(
-                    text: 'Don’t have an account? ', // First part of the text
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium, // Style for the first part
-                    children: const <TextSpan>[
-                      TextSpan(
-                          text: 'Signup',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                    ],
-                  ),
+        return SizedBox(
+          key: const ValueKey<AuthState>(AuthState.login),
+          height: 650,
+          child: Column(
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Sign in into your\naccount',
+                  style: Theme.of(context).textTheme.headlineLarge,
                 ),
               ),
-            )
-          ],
+              const SizedBox(height: 10),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Login to your account',
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border:
+                      OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+                ),
+              ),
+              const SizedBox(height: 10),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child:
+                    ElevatedButton(onPressed: () async {
+                      setState(() {
+                        _isLoading = true; // Start loading
+                      });
+                      String response = await authService.logIn(_emailController);
+                      showToast(response);
+                      setState(() {
+                        _isLoading = false; // Start loading
+                      });
+                    }, child: const Text('Login')),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(18.0),
+                child: Text('or continue with'),
+              ),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Google'),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      currentAuthState = AuthState.signup; // Switch to signup
+                    });
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      text: 'Don’t have an account? ', // First part of the text
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium, // Style for the first part
+                      children: const <TextSpan>[
+                        TextSpan(
+                            text: 'Signup',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
         );
 
       // Default case to handle unexpected values

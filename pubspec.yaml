@@ -42,6 +42,8 @@ dependencies:
   dio: ^5.7.0
   fluttertoast: ^8.2.8
   permission_handler: ^11.3.1
+  geolocator: ^13.0.2
+  geocoding: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -71,6 +73,10 @@ flutter:
     - assets/slide3.svg
     - assets/location.png
     - assets/map_pin.png
+    - assets/home.png
+    - assets/orders.png
+    - assets/profile.png
+    - assets/category.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

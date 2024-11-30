@@ -70,3 +70,22 @@ class UserApi {
     }
   }
 }
+
+class ProductApi{
+
+  final dio = Dio();
+  Future<List<Map<String, dynamic>>> getProductCategories() async {
+    String storeId = '42af4ea9-2014-4bcb-9db1-983fe108a118';
+    try {
+      Response response = await dio.get('https://admin.purotaja.com/api/$storeId/categories');
+      if (response.statusCode == 200) {
+        return List<Map<String, dynamic>>.from(response.data['categories']);
+      } else {
+        throw Exception("Failed to load categories.");
+      }
+    } catch (e) {
+      print("Error fetching categories: $e");
+      return [];
+    }
+  }
+}

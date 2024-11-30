@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:purotaja/app_routes.dart';
 
 import 'app_theme.dart';
+import 'controllers/user_controller.dart';
 
 void main() {
+  Get.put(UserController());
   runApp(const MyApp());
 }
 

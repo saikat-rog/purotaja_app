@@ -7,10 +7,16 @@ class AppTheme {
     return ThemeData(
       primaryColor: const Color(0xFF735498),
       scaffoldBackgroundColor: Colors.white,
+      bottomAppBarTheme: const BottomAppBarTheme(color: Colors.white),
       //Theme for text
       textTheme: TextTheme(
         headlineLarge: GoogleFonts.sen(
-          fontSize: 40,
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+          color: const Color(0xFF32343E),
+        ),
+        headlineMedium: GoogleFonts.sen(
+          fontSize: 26,
           fontWeight: FontWeight.bold,
           color: const Color(0xFF32343E),
         ),

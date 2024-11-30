@@ -3,9 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../controllers/user_controller.dart';
+import '../models/user_model.dart';
 import '../services/api_service.dart';
 
 class AuthService {
+  final userController = Get.find<UserController>();
+
   Future<void> signUp(TextEditingController nameController,
       TextEditingController emailController) async {
     final UserApi userApi = UserApi();
@@ -14,6 +18,7 @@ class AuthService {
         await userApi.createUser(nameController.text, emailController.text);
     if (resCode == 201) {
       // Successfully created the user
+      userController.setUser(UserModel(name: nameController.text, email: emailController.text));
       if (kDebugMode) {
         print('User created');
       }
@@ -44,10 +49,11 @@ class AuthService {
       }
 
       // Set authentication status and navigate to the home screen
+      userController.setUser(UserModel(name: user['name'], email: user['email']));
       setAuthenticationStatus(true);
       Get.offNamed('/');
 
-      return 'Welcome, ${user['name']}!'; // Return success message
+      return 'Welcome ${user['name']}!'; // Return success message
     }
   }
 
