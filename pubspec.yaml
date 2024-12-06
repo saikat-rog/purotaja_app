@@ -44,6 +44,7 @@ dependencies:
   permission_handler: ^11.3.1
   geolocator: ^13.0.2
   geocoding: ^3.0.0
+  flutter_dotenv: ^5.2.1
 
 dev_dependencies:
   flutter_test:
@@ -62,6 +63,7 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
+    - .env
     - assets/ellipse_1006.svg
     - assets/ellipse_1005.svg
     - assets/purotaja_logo.png
@@ -77,6 +79,17 @@ flutter:
     - assets/orders.png
     - assets/profile.png
     - assets/category.png
+    - assets/profile_assets/bag.svg
+    - assets/profile_assets/bell.svg
+    - assets/profile_assets/fav.svg
+    - assets/profile_assets/map.svg
+    - assets/profile_assets/person.svg
+    - assets/profile_assets/question.svg
+    - assets/profile_assets/review.svg
+    - assets/profile_assets/logout.svg
+    - assets/profile_assets/email.svg
+    - assets/profile_assets/phone.svg
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

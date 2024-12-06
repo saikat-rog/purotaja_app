@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
+  static const Color bgGrey = Color(0xFFF6F8FA);
   //light theme
   static ThemeData get lightTheme {
     return ThemeData(
       primaryColor: const Color(0xFF735498),
+      cardColor: const Color(0xFF735498),
       scaffoldBackgroundColor: Colors.white,
       bottomAppBarTheme: const BottomAppBarTheme(color: Colors.white),
+
       //Theme for text
       textTheme: TextTheme(
         headlineLarge: GoogleFonts.sen(
@@ -18,6 +21,10 @@ class AppTheme {
         headlineMedium: GoogleFonts.sen(
           fontSize: 26,
           fontWeight: FontWeight.bold,
+          color: const Color(0xFF32343E),
+        ),
+        headlineSmall: GoogleFonts.sen(
+          fontSize: 20,
           color: const Color(0xFF32343E),
         ),
         bodyLarge: GoogleFonts.sen(

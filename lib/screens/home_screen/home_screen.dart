@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:purotaja/services/api_service.dart';
 import '../../controllers/category_controller.dart';
 import '../../controllers/user_controller.dart';
-import '../../utils/auth_service.dart';
+import '../../services/auth_service.dart';
 import '../../utils/internal_permissions.dart';
 
 class HomeScreen extends StatefulWidget {
