@@ -44,11 +44,11 @@ class BottomNavBar extends StatelessWidget {
           ),
           BottomNavigationBarItem(
             icon: Image.asset('assets/category.png'),
-            label: 'Orders',
+            label: 'Category',
           ),
           BottomNavigationBarItem(
             icon: Image.asset('assets/orders.png'),
-            label: 'Category',
+            label: 'Orders',
           ),
           BottomNavigationBarItem(
             icon: Image.asset('assets/profile.png'),
