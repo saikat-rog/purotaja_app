@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:purotaja/services/api_service.dart';
 
@@ -18,7 +19,9 @@ class CategoryController extends GetxController {
       final fetchedCategories = await productApi.getProductCategories();
       categories.assignAll(fetchedCategories);
     } catch (e) {
-      print("Error fetching categories: $e");
+      if (kDebugMode) {
+        print("Error fetching categories: $e");
+      }
     } finally {
       isLoading.value = false;
     }

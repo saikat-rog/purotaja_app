@@ -155,7 +155,6 @@ class UserApi {
     }
     return null;
   }
-
 }
 
 class ProductApi {
@@ -165,7 +164,7 @@ class ProductApi {
     String storeId = '42af4ea9-2014-4bcb-9db1-983fe108a118';
     try {
       Response response =
-          await dio.get('${dotenv.env["API_URI"]}/$storeId/categories');
+          await dio.get('${dotenv.env["API_URI"]}/${dotenv.env["STORE_ID"]}/categories');
 
       if (response.statusCode == 200) {
         return List<Map<String, dynamic>>.from(response.data['categories']);
@@ -179,4 +178,30 @@ class ProductApi {
       return [];
     }
   }
+
+  Future<List<Map<String, dynamic>>> getProductsFromCategories(String categoryId) async {
+    try {
+      // Send GET request to fetch category data
+      Response response = await dio.get(
+        '${dotenv.env["API_URI"]}/${dotenv.env["STORE_ID"]}/categories/$categoryId',
+      );
+
+      // Check if the response is successful
+      if (response.statusCode == 200) {
+        // Safely extract products from the response
+        final products = response.data['category']['product'] as List<dynamic>;
+        return products.map((product) => Map<String, dynamic>.from(product)).toList();
+      } else {
+        throw Exception("Failed to load products.");
+      }
+    } catch (e) {
+      // Log the error for debugging purposes
+      if (kDebugMode) {
+        print("Error fetching products: $e");
+      }
+      return [];
+    }
+  }
+
+
 }

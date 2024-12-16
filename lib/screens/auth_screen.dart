@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purotaja/services/api_service.dart';
-import 'package:purotaja/services/auth_service.dart';
 import 'package:purotaja/widgets/top_banner.dart';
 
 enum AuthState { login, signup, verify }
@@ -475,7 +474,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
       default:
         return const SizedBox
-            .shrink(); // Empty widget if no valid state is found
+            .shrink();
     }
   }
 }
