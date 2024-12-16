@@ -7,6 +7,7 @@ import '../../controllers/products_controller.dart';
 import '../../controllers/user_controller.dart';
 import '../../services/auth_service.dart';
 import '../../utils/internal_permissions.dart';
+import '../../widgets/categories_slide.dart';
 import '../../widgets/products_slide.dart';
 import '../../widgets/testimonials_slide.dart';
 
@@ -128,51 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(height: 8),
               // Scrollable Categories
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                child: SizedBox(
-                  height: 100,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: categoryController.categories.length,
-                    itemBuilder: (context, index) {
-                      final category = categoryController.categories[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 70,
-                              height: 70,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.black12,
-                              ),
-                              child: category['image'] != null &&
-                                  category['image'].isNotEmpty
-                                  ? ClipOval(
-                                child: Image.network(
-                                  category['image'][0]['url'],
-                                  fit: BoxFit.cover,
-                                  width: 70,
-                                  height: 70,
-                                ),
-                              )
-                                  : const Icon(Icons.image, size: 40),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              category['name'] ?? 'Unknown',
-                              style: Theme.of(context).textTheme.bodySmall,
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
+              CategoriesSlideWidget(),
               // Best Sellers and Recommended
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 20.0),
@@ -237,7 +194,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 transitionBuilder: (Widget child, Animation<double> animation) {
                   return FadeTransition(opacity: animation, child: child);
                 },
-                child: _buildProductSlide(),
+                child: _buildProductSlideOnClick(),
               ),
               // Testimonials
               Padding(
@@ -263,7 +220,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildProductSlide() {
+  // Building product slide upon click on Best seller or Recommendation
+  Widget _buildProductSlideOnClick() {
     return Obx(() {
       switch (homeController.selectedOptionState.value) {
         case SelectedOptionState.bestSeller:

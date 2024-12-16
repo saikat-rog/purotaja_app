@@ -37,19 +37,19 @@ class ProductInfoScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 70),
+                  SizedBox(height: 40),
                   // Product Image
                   Container(
                     width: double.infinity,
-                    height: 300,
+                    height: 200,
                     decoration: BoxDecoration(
-                      color: Colors.black12,
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: product['image'] != null && product['image'].isNotEmpty
                         ? Image.network(
                       product['image'][0]['url'],
-                      fit: BoxFit.cover,
+                      fit: BoxFit.fitHeight,
                     )
                         : const Icon(
                       Icons.image,
@@ -215,15 +215,17 @@ class ProductInfoScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: Text(
-                      'You may also like',
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      'You may also like:',
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
                   ProductsSlideWidget(categoryId: '67531a520fde5d5d4cc4065d'),
+                  SizedBox(height: 200,),
                 ],
               ),
             ),
           ),
+          // Fixed bar to add to cart
           Positioned(
             bottom: 0,
             left: 0,
@@ -251,7 +253,7 @@ class ProductInfoScreen extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'MRP: \u20B9${product['price']} (INCL. OF ALL TAXES)',
+                            'MRP: \u20B9${product['price']} (Incl. of all taxes)',
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.grey,
@@ -264,7 +266,13 @@ class ProductInfoScreen extends StatelessWidget {
                         onPressed: () {
                           // Add to cart functionality goes here
                         },
-                        child: Row(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(120, 50),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        child: const Row(
                           children: [
                             Text('Add'),
                             SizedBox(width: 10,),
@@ -275,12 +283,6 @@ class ProductInfoScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(120, 50),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
                       ),
                     ],
                   ),
@@ -290,37 +292,6 @@ class ProductInfoScreen extends StatelessWidget {
               ),
             ),
           ),
-
-          // Bottom fixed bar to add to cart
-          // Positioned(
-          //   bottom: 0,
-          //   left: 0,
-          //   right: 0,
-          //   child: Container(
-          //     height: 100,
-          //     color: Colors.white,
-          //     padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       children: [
-          //         // Price info on the left side
-          //         Text(
-          //           '\u20B9${product['price'] - product['discount']}',
-          //           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-          //             fontWeight: FontWeight.bold,
-          //           ),
-          //         ),
-          //         // Add button on the right side
-          //         ElevatedButton(
-          //           onPressed: () {
-          //             // Add to cart functionality goes here
-          //           },
-          //           child: Text('Add'),
-          //         ),
-          //       ],
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
