@@ -1,3 +1,5 @@
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:purotaja/screens/access_location_screen.dart';
@@ -15,6 +17,7 @@ import 'package:purotaja/screens/category_screen/category_screen.dart';
 import 'package:purotaja/screens/home_screen/home_screen.dart';
 import 'package:purotaja/screens/onboarding_screen.dart';
 import 'package:purotaja/screens/orders_screen/orders_screen.dart';
+import 'package:purotaja/screens/product_info_screen.dart';
 import 'package:purotaja/screens/splash_screen.dart';
 
 class AppRoutes {
@@ -117,6 +120,14 @@ class AppRoutes {
     GetPage(
       name: '/addresses',
       page: () => AddressScreen(),
+      transition: Transition.circularReveal,
+      transitionDuration: const Duration(milliseconds: 300),
+    ),
+    GetPage(
+      name: '/:productId', // Dynamic route for product info
+      page: () => ProductInfoScreen(
+        productId: Get.parameters['productId']!,
+      ),
       transition: Transition.circularReveal,
       transitionDuration: const Duration(milliseconds: 300),
     ),

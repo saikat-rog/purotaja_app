@@ -11,7 +11,7 @@ class ProductsController extends GetxController {
   var errorMessage = ''.obs;
 
   // Fetch products based on category ID
-  Future<void> fetchProducts(String id) async {
+  Future<void> getAllProductsFromCategoryByCategoryId(String id) async {
     isLoading.value = true; // Start loading
     errorMessage.value = ''; // Clear previous errors
     try {
@@ -33,4 +33,10 @@ class ProductsController extends GetxController {
       isLoading.value = false; // Stop loading
     }
   }
+
+  dynamic getProductById(String id) {
+    return products.firstWhere((product) => product['id'] == id, orElse: () => {});
+  }
+
+
 }

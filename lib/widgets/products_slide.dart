@@ -16,7 +16,7 @@ class ProductsSlideWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Fetch products dynamically
-    productsController.fetchProducts(categoryId);
+    productsController.getAllProductsFromCategoryByCategoryId(categoryId);
 
     return Obx(() {
       final products = productsController.products;
@@ -45,77 +45,68 @@ class ProductsSlideWidget extends StatelessWidget {
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: products.length,
-            itemBuilder: (context, index) {
-              final product = products[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Product image
-                    Container(
-                      width: 150,
-                      height: 150,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        color: Colors.black12,
-                      ),
-                      child: product['image'] != null &&
-                          product['image'].isNotEmpty
-                          ? Image.network(
-                        product['image'][0]['url'],
-                        fit: BoxFit.cover,
-                      )
-                          : const Icon(Icons.image, size: 40),
-                    ),
-                    const SizedBox(height: 4),
-                    // Product name
-                    Text(
-                      product['name'] ?? 'Unknown',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyLarge
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    // Product description
-                    Text(
-                      product['description'] ?? 'Unknown Description',
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
-                    // Product price
-                    Row(
+              itemBuilder: (context, index) {
+                final product = products[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      // Navigate to the product info page with the product id
+                      Get.toNamed('/${product['id']}');  // Navigate using the product id
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          '\u20B9${product['price'] - product['discount']}' ??
-                              '0',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall
-                              ?.copyWith(fontWeight: FontWeight.bold),
+                        // Product image
+                        Container(
+                          width: 150,
+                          height: 150,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            color: Colors.black12,
+                          ),
+                          child: product['image'] != null && product['image'].isNotEmpty
+                              ? Image.network(
+                            product['image'][0]['url'],
+                            fit: BoxFit.cover,
+                          )
+                              : const Icon(Icons.image, size: 40),
                         ),
-                        const SizedBox(width: 5),
+                        const SizedBox(height: 4),
+                        // Product name
                         Text(
-                          '\u20B9${product['price']}',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headlineSmall
-                              ?.copyWith(
-                              decoration: TextDecoration.lineThrough),
+                          product['name'] ?? 'Unknown',
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
                         ),
-                        const SizedBox(width: 5),
+                        // Product description
                         Text(
-                          '${product['discount']}% off' ?? '0',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyLarge
-                              ?.copyWith(color: Colors.red),
+                          product['description'] ?? 'Unknown Description',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        // Product price
+                        Row(
+                          children: [
+                            Text(
+                              '\u20B9${product['price'] - product['discount']}' ?? '0',
+                              style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              '\u20B9${product['price']}',
+                              style: Theme.of(context).textTheme.headlineSmall?.copyWith(decoration: TextDecoration.lineThrough),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              '${product['discount']}% off' ?? '0',
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.red),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
-              );
-            },
+                  ),
+                );
+              },
           ),
         ),
       );
