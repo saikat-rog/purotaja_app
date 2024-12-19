@@ -3,7 +3,9 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:purotaja/screens/access_location_screen.dart';
-import 'package:purotaja/screens/account_screen/account_options/addresses_screen.dart';
+import 'package:purotaja/screens/account_screen/account_options/addresses_screen/add_address_screen.dart';
+import 'package:purotaja/screens/account_screen/account_options/addresses_screen/addresses_screen.dart';
+import 'package:purotaja/screens/account_screen/account_options/addresses_screen/edit_addresses_acreen.dart';
 import 'package:purotaja/screens/account_screen/account_options/faqs_screen.dart';
 import 'package:purotaja/screens/account_screen/account_options/favourite_screen.dart';
 import 'package:purotaja/screens/account_screen/account_options/notifications_screen.dart';
@@ -124,10 +126,24 @@ class AppRoutes {
       transitionDuration: const Duration(milliseconds: 300),
     ),
     GetPage(
-      name: '/:productId', // Dynamic route for product info
+      name: '/product/:productId',
       page: () => ProductInfoScreen(
         productId: Get.parameters['productId']!,
       ),
+      transition: Transition.circularReveal,
+      transitionDuration: const Duration(milliseconds: 300),
+    ),
+    GetPage(
+      name: '/editAddress/:addressId',
+      page: () => EditAddressScreen(
+        addressId: Get.parameters['addressId']!,
+      ),
+      transition: Transition.circularReveal,
+      transitionDuration: const Duration(milliseconds: 300),
+    ),
+    GetPage(
+      name: '/addAddresses',
+      page: () => const AddAddressScreen(),
       transition: Transition.circularReveal,
       transitionDuration: const Duration(milliseconds: 300),
     ),

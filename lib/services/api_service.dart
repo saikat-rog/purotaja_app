@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -117,7 +119,7 @@ class UserApi {
 
       final user = response.data['client'];
       userController.setUser(UserModel(
-          name: user['name'], email: user['email'], phone: user['phone']));
+          id: user['id'], name: user['name'], email: user['email'], phone: user['phone']));
       authService.setAuthenticationStatus(true);
       Get.offNamed('/');
     } catch (e) {
@@ -155,6 +157,122 @@ class UserApi {
     }
     return null;
   }
+
+  Future<dynamic> fetchUserAddresses(String userId) async {
+    Dio dio = Dio();
+
+    try {
+      Response response =
+      await dio.get('${dotenv.env["API_URI"]}/client/$userId/address');
+
+      final addresses = response.data['addresses'];
+      return addresses;
+
+    } catch (e) {
+      if (e is DioException) {
+        if (e.response != null) {
+          if (kDebugMode) {
+            print(e.response?.data['message']);
+          }
+          showToast(e.response?.data['message']);
+        } else {
+          // Handling other errors (network, timeout, etc.)
+          showToast(
+              'Could not connect to the server. Try again after sometime.');
+        }
+      } else {
+        // Any other kind of error
+        showToast('Something went wrong. Please try again.');
+      }
+    }
+    return null;
+  }
+
+  Future<void> createUserAddresses(String userId, var userAddressData) async {
+    Dio dio = Dio();
+
+    try {
+      Response response =
+      await dio.post('${dotenv.env["API_URI"]}/client/$userId/address', data: userAddressData);
+
+    } catch (e) {
+      if (e is DioException) {
+        if (e.response != null) {
+          if (kDebugMode) {
+            print(e.response?.data['message']);
+          }
+          showToast(e.response?.data['message']);
+        } else {
+          // Handling other errors (network, timeout, etc.)
+          showToast(
+              'Could not connect to the server. Try again after sometime.');
+        }
+      } else {
+        // Any other kind of error
+        // print(e);
+        showToast('Something went wrong. Please try again.');
+      }
+    }
+  }
+
+  Future<void> updateUserAddresses(String userId, String addressId, var userAddressData) async {
+    Dio dio = Dio();
+
+    try {
+      Response response =
+      await dio.post('${dotenv.env["API_URI"]}/client/$userId/address/$addressId', data: userAddressData);
+
+      showToast(response.data['message']);
+
+    } catch (e) {
+      if (e is DioException) {
+        if (e.response != null) {
+          if (kDebugMode) {
+            print(e.response?.data['message']);
+          }
+          showToast(e.response?.data['message']);
+        } else {
+          // Handling other errors (network, timeout, etc.)
+          showToast(
+              'Could not connect to the server. Try again after sometime.');
+        }
+      } else {
+        // Any other kind of error
+        showToast('Something went wrong. Please try again.');
+      }
+    }
+    return null;
+  }
+
+  Future<void> deleteUserAddresses(String userId, String addressId) async {
+    Dio dio = Dio();
+
+    try {
+      Response response =
+      await dio.delete('${dotenv.env["API_URI"]}/client/$userId/address/$addressId');
+
+      showToast(response.data['message']);
+
+    } catch (e) {
+      if (e is DioException) {
+        if (e.response != null) {
+          if (kDebugMode) {
+            print(e.response?.data['message']);
+          }
+          showToast(e.response?.data['message']);
+        } else {
+          // Handling other errors (network, timeout, etc.)
+          showToast(
+              'Could not connect to the server. Try again after sometime.');
+        }
+      } else {
+        // Any other kind of error
+        showToast('Something went wrong. Please try again.');
+      }
+    }
+    return null;
+  }
+
 }
 
 class ProductApi {

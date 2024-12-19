@@ -104,7 +104,6 @@ class _AuthScreenState extends State<AuthScreen> {
       case AuthState.signup:
         return SizedBox(
           key: const ValueKey<AuthState>(AuthState.signup),
-          height: 650,
           child: Form(
             key: _formKeySignUp,
             child: Column(
@@ -256,7 +255,6 @@ class _AuthScreenState extends State<AuthScreen> {
       case AuthState.login:
         return SizedBox(
           key: const ValueKey<AuthState>(AuthState.login),
-          height: 650,
           child: Form(
             key: _formKeyLogin,
             child: Column(
@@ -358,7 +356,6 @@ class _AuthScreenState extends State<AuthScreen> {
       case AuthState.verify:
         return SizedBox(
           key: const ValueKey<AuthState>(AuthState.verify),
-          height: 650,
           child: Column(
             children: [
               Align(

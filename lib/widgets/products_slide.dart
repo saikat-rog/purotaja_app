@@ -53,7 +53,7 @@ class ProductsSlideWidget extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () {
                       // Navigate to the product info page with the product id
-                      Get.toNamed('/${product['id']}');  // Navigate using the product id
+                      Get.toNamed('/product/${product['id']}');  // Navigate using the product id
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

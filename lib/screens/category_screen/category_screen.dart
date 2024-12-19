@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../controllers/category_controller.dart';
 import '../../controllers/products_controller.dart';
+import '../../widgets/placeholder/grid_skeleton.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});
@@ -98,9 +99,15 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         // Selection bar
                         if (selectedCategoryIndex == index)
                           Container(
-                            height: 50,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(500),
+                                bottomLeft: Radius.circular(500),
+                              ),
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            height: 100,
                             width: 5,
-                            color: Theme.of(context).primaryColor,
                           )
                         else
                           const SizedBox(width: 5), // Placeholder for spacing
@@ -116,7 +123,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
           Expanded(
             child: Obx(() {
               if (productsController.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
+                return GridSkeletonWidget();
               } else if (productsController.products.isEmpty) {
                 return const Center(child: Text("No products available"));
               } else {
@@ -135,7 +142,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                     final product = productsController.products[index];
                     return GestureDetector(
                       onTap: (){
-                        Get.toNamed('/${product['id']}');
+                        Get.toNamed('/product/${product['id']}');
                       },
                       child: Container(
                         child: Padding(

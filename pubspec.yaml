@@ -47,6 +47,7 @@ dependencies:
   flutter_dotenv: ^5.2.1
   dropdown_button2: ^2.3.9
   skeleton_loader: ^2.0.0+4
+  shimmer: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -91,6 +92,10 @@ flutter:
     - assets/profile_assets/logout.svg
     - assets/profile_assets/email.svg
     - assets/profile_assets/phone.svg
+    - assets/profile_assets/addresses/home.svg
+    - assets/profile_assets/addresses/work.svg
+    - assets/profile_assets/addresses/edit.svg
+    - assets/profile_assets/addresses/delete.svg
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

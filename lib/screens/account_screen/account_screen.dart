@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:purotaja/app_theme.dart';
 import 'package:purotaja/services/auth_service.dart';
 import '../../controllers/user_controller.dart';
+import '../../widgets/logout_confirmation.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -161,8 +162,9 @@ class _AccountScreenState extends State<AccountScreen> {
           return InkWell(
             onTap: () {
               if (item['text'] == 'Logout') {
-                authService.setAuthenticationStatus(false);
-                Get.offNamed('/auth');
+                _showLogoutConfirmation(context);
+                // authService.setAuthenticationStatus(false);
+                // Get.offNamed('/auth');
               } else {
                 Get.toNamed(item['route']);
               }
@@ -206,6 +208,21 @@ class _AccountScreenState extends State<AccountScreen> {
         padding: const EdgeInsets.all(10.0),
         child: SvgPicture.asset(iconPath, height: 30),
       ),
+    );
+  }
+
+  // Logout confirmation pop up
+  void _showLogoutConfirmation(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return LogoutConfirmation(
+          onConfirm: () {
+            authService.setAuthenticationStatus(false);
+            Get.offNamed('/auth');
+          },
+        );
+      },
     );
   }
 }

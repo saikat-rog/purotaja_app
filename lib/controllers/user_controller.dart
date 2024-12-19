@@ -8,7 +8,7 @@ import 'package:geolocator/geolocator.dart';
 
 class UserController extends GetxController {
   // User model stored as observable
-  var user = UserModel(name: '', email: '', phone: '').obs;
+  var user = UserModel(id: '', name: '', email: '', phone: '').obs;
   var userLocation = 'Finding you...'.obs;
 
   @override
@@ -28,6 +28,7 @@ class UserController extends GetxController {
   Future<void> _saveUserInfo(UserModel userModel) async {
     final prefs = await SharedPreferences.getInstance();
     final userJson = jsonEncode({
+      'id': userModel.id,
       'name': userModel.name,
       'email': userModel.email,
       'phone': userModel.phone,
@@ -43,6 +44,7 @@ class UserController extends GetxController {
     if (userJson != null) {
       final userMap = jsonDecode(userJson);
       user.value = UserModel(
+        id: userMap['id'],
         name: userMap['name'],
         email: userMap['email'],
         phone: userMap['phone'],
@@ -54,7 +56,7 @@ class UserController extends GetxController {
   Future<void> clearUserInfo() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove('user_info'); // Clear stored user data
-    user.value = UserModel(name: '', email: '', phone: ''); // Clear user data in app
+    user.value = UserModel(id: '', name: '', email: '', phone: ''); // Clear user data in app
   }
 
   // Set user location

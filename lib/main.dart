@@ -14,8 +14,8 @@ Future<void> main() async {
   Get.put(TopBannerController());
   runApp(const MyApp());
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.transparent, // Set this to the color you want
-    statusBarIconBrightness: Brightness.dark, // Adjust icon brightness
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.dark,
   ));
 }
 
