@@ -14,7 +14,7 @@ class EditAddressScreen extends StatefulWidget {
 }
 
 class _EditAddressScreenState extends State<EditAddressScreen> {
-  AddressController addressController = Get.put(AddressController());
+  final AddressController addressController = Get.put(AddressController());
 
   final addressFieldController = TextEditingController();
   final streetController = TextEditingController();
@@ -25,106 +25,131 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
   String selectedLabel = 'HOME';
 
   @override
+  void initState() {
+    super.initState();
+    // Fetch data when the screen initializes
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      addressController.getAddressByAddressId(widget.addressId);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Address'),
         backgroundColor: Colors.transparent,
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30),
-        child: SingleChildScrollView(
-          //Text fields
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Address TextField
-              _buildTextField(
-                controller: addressFieldController,
-                label: 'Address',
-                hint: 'Enter your address',
-              ),
-              const SizedBox(height: 16),
+      body: Obx(() {
+        // Ensure the data is loaded
+        if (addressController.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-              // Street TextField
-              _buildTextField(
-                controller: streetController,
-                label: 'Street',
-                hint: 'Enter street name',
-              ),
-              const SizedBox(height: 16),
+        // Populate controllers with fetched data
+        addressFieldController.text =
+            addressController.address['address'] ?? '';
+        streetController.text = addressController.address['street'] ?? '';
+        apartmentController.text =
+            addressController.address['appartment'] ?? '';
+        postalCodeController.text =
+            addressController.address['postalCode'] ?? '';
+        selectedLabel = addressController.address['label'] ?? 'HOME';
 
-              // Apartment TextField
-              _buildTextField(
-                controller: apartmentController,
-                label: 'Apartment',
-                hint: 'Enter apartment number or name',
-              ),
-              const SizedBox(height: 16),
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Address TextField
+                _buildTextField(
+                  controller: addressFieldController,
+                  label: 'Address',
+                  hint: 'Enter your address',
+                ),
+                const SizedBox(height: 16),
 
-              // Postal Code TextField
-              _buildTextField(
-                controller: postalCodeController,
-                label: 'Postal Code',
-                hint: 'Enter postal code',
-              ),
-              const SizedBox(height: 16),
+                // Street TextField
+                _buildTextField(
+                  controller: streetController,
+                  label: 'Street',
+                  hint: 'Enter street name',
+                ),
+                const SizedBox(height: 16),
 
-              // Label
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  _buildLabelButton('HOME'),
-                  _buildLabelButton('WORK'),
-                  _buildLabelButton('OTHER'),
-                ],
-              ),
-              SizedBox(height: 20),
+                // Apartment TextField
+                _buildTextField(
+                  controller: apartmentController,
+                  label: 'Apartment',
+                  hint: 'Enter apartment number or name',
+                ),
+                const SizedBox(height: 16),
 
-              // Default Address Toggle
-              Obx(() => Row(
-                children: [
-                  Checkbox(
-                    value: addressController.isDefault.value,
-                    onChanged: (value) =>
-                    addressController.isDefault.value = value ?? false,
-                  ),
-                  Text(
-                    'Set as Default',
-                    style: Theme.of(context).textTheme.headlineSmall,
-                  ),
-                ],
-              )),
-              const SizedBox(height: 16),
+                // Postal Code TextField
+                _buildTextField(
+                  controller: postalCodeController,
+                  label: 'Postal Code',
+                  hint: 'Enter postal code',
+                ),
+                const SizedBox(height: 16),
 
-              // Update Button
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.00),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 60,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Call the updateAddress function from the controller
-                      addressController.updateAddress(
-                        widget.addressId,
-                        addressFieldController,
-                        streetController,
-                        apartmentController,
-                        postalCodeController,
-                        selectedLabel,
-                        addressController.isDefault.value,
-                      );
-                      Get.back(); // Go back after updating
-                    },
-                    child: const Text('Update Address'),
+                // Label
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    _buildLabelButton('HOME'),
+                    _buildLabelButton('WORK'),
+                    _buildLabelButton('OTHER'),
+                  ],
+                ),
+                const SizedBox(height: 20),
+
+                // Default Address Toggle
+                Row(
+                  children: [
+                    Checkbox(
+                      value: addressController.isDefault.value,
+                      onChanged: (value) =>
+                      addressController.isDefault.value = value ?? false,
+                    ),
+                    Text(
+                      'Set as Default',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // Update Button
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.00),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 60,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Call the updateAddress function from the controller
+                        addressController.updateAddress(
+                          widget.addressId,
+                          addressFieldController,
+                          streetController,
+                          apartmentController,
+                          postalCodeController,
+                          selectedLabel,
+                          addressController.isDefault.value,
+                        );
+                        Get.back(); // Go back after updating
+                      },
+                      child: const Text('Update Address'),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 
@@ -132,15 +157,12 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
   Widget _buildLabelButton(String label) {
     return GestureDetector(
       onTap: () {
-        setState(() {
-          selectedLabel = label; // Update selected label
-          addressController.label.value = label; // Update controller label
-        });
+        addressController.address['label'] = label;
       },
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
-          color: selectedLabel == label
+          color: addressController.address['label'] == label
               ? AppTheme.lightTheme.primaryColor // Set background to primary color when selected
               : AppTheme.bgGrey, // Default background color
         ),
@@ -149,7 +171,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
           child: Text(
             label,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              color: selectedLabel == label
+              color: addressController.address['label'] == label
                   ? Colors.white // Text color when selected
                   : Colors.black, // Default text color
             ),

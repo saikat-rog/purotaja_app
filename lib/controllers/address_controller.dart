@@ -5,11 +5,11 @@ import 'package:purotaja/services/api_service.dart';
 
 class AddressController extends GetxController {
   UserApi userApi = UserApi();
+  var address = {}.obs; // Instead of a list, use a map to store the address
   var addresses = [].obs;
   var isLoading = false.obs; // Define the loading state
 
   var isDefault = false.obs;
-  var label = ''.obs;
 
   final userController = Get.find<UserController>();
   @override
@@ -19,32 +19,32 @@ class AddressController extends GetxController {
   }
 
   //Get Address By ID
-  Future<dynamic> getAddressByAddressId(String addressId) async {
+  // Get Address By ID
+  Future<void> getAddressByAddressId(String addressId) async {
     isLoading.value = true; // Set loading to true before starting the search
 
     try {
+      // Fetch addresses first if not already done
+      await fetchAddresses();
+
       // Search for the address by addressId in the reactive addresses list
       final addressData = addresses.firstWhere(
-        (address) =>
-            address['id'] == addressId, // Condition to match the addressId
+            (address) => address['id'] == addressId, // Condition to match the addressId
         orElse: () => null, // Return null if no matching address is found
       );
 
       if (addressData != null) {
         // Successfully found the address, return the addressData
-        return addressData;
+        address.value = addressData;
       } else {
         // No address found with the given addressId
         Get.snackbar("Not Found", "Address not found for the provided ID.");
-        return null;
       }
     } catch (e) {
       // Handle any errors (optional)
       Get.snackbar("Error", "Failed to fetch the address.");
-      return null;
     } finally {
-      isLoading.value =
-          false; // Set loading to false after the operation is complete
+      isLoading.value = false; // Set loading to false after the operation is complete
     }
   }
 

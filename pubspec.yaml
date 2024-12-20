@@ -96,6 +96,7 @@ flutter:
     - assets/profile_assets/addresses/work.svg
     - assets/profile_assets/addresses/edit.svg
     - assets/profile_assets/addresses/delete.svg
+    - assets/profile_assets/addresses/location.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
