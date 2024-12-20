@@ -4,23 +4,37 @@ import 'package:dropdown_button2/dropdown_button2.dart'; // Import the package
 import '../controllers/products_controller.dart';
 import '../widgets/products_slide.dart';
 
-class ProductInfoScreen extends StatelessWidget {
+class ProductInfoScreen extends StatefulWidget {
   final String productId;
 
   const ProductInfoScreen({super.key, required this.productId});
 
   @override
+  State<ProductInfoScreen> createState() => _ProductInfoScreenState();
+}
+
+class _ProductInfoScreenState extends State<ProductInfoScreen> {
+  @override
   Widget build(BuildContext context) {
     final productsController = Get.find<ProductsController>();
-    final product = productsController.getProductById(productId);
+    final product = productsController.getProductById(widget.productId);
 
     // Dropdown values
     List<int> quantityOptions = [1, 2, 3, 4, 5];
-    List<String> cutTypeOptions = [product['subcategories'][0]['name'], product['subcategories'][1]['name']];
+    List<String> cutTypeOptions = [];
+    if (product['subcategories'] != null &&
+        product['subcategories'].length > 0) {
+      cutTypeOptions = product['subcategories']
+          .map<String>(
+              (subcategory) => subcategory['name']?.toString() ?? 'Unknown')
+          .toList();
+    }
 
     // Selected values for the dropdowns
     Rx<int> selectedQuantity = Rx<int>(quantityOptions[0]);
-    Rx<String> selectedCutType = Rx<String>(cutTypeOptions[0]);
+    Rx<String> selectedCutType = cutTypeOptions.isNotEmpty
+        ? Rx<String>(cutTypeOptions[0])
+        : Rx<String>('No options available');
 
     return Scaffold(
       appBar: AppBar(
@@ -32,197 +46,220 @@ class ProductInfoScreen extends StatelessWidget {
       body: Stack(
         children: [
           SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 40),
-                  // Product Image
-                  Container(
-                    width: double.infinity,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: product['image'] != null && product['image'].isNotEmpty
-                        ? Image.network(
-                      product['image'][0]['url'],
-                      fit: BoxFit.fitHeight,
-                    )
-                        : const Icon(
-                      Icons.image,
-                      size: 80,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  const SizedBox(height: 25),
-                  // Product Name
-                  Text(
-                    product['name'] ?? 'Unknown Product',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineLarge
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 10),
-                  // Price and Discount
-                  Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Container(
+                        width: double.infinity,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: product['image'] != null && product['image'].isNotEmpty
+                            ? PageView.builder(
+                          itemCount: product['image'].length,
+                          itemBuilder: (context, index) {
+                            return Image.network(
+                              product['image'][index]['url'],
+                              fit: BoxFit.fitHeight,
+                            );
+                          },
+                        )
+                            : const Icon(
+                          Icons.image,
+                          size: 80,
+                          color: Colors.grey,
+                        ),
+                      ),
+                      const SizedBox(height: 25),
+                      // Product Name
                       Text(
-                        '\u20B9${product['price'] - product['discount']}' ?? '0',
+                        product['name'] ?? 'Unknown Product',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineLarge
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 10),
+                      // Price and Discount
+                      Row(
+                        children: [
+                          Text(
+                            '\u20B9${product['price'] - (product['discount'] ?? 0)}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          if ((product['discount'] ?? 0) > 0) ...[
+                            const SizedBox(width: 8),
+                            Text(
+                              '\u20B9${product['price']}',
+                              style:
+                              Theme.of(context).textTheme.headlineSmall?.copyWith(
+                                decoration: TextDecoration.lineThrough,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              '${product['discount']}% off',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(color: Colors.red),
+                            ),
+                          ],
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      // Qty and Cut type dropdown
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Dropdown for Quantity
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Quantity',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 10),
+                              Obx(() {
+                                return DropdownButton2<int>(
+                                  underline: SizedBox.shrink(),
+                                  value: selectedQuantity.value,
+                                  onChanged: (int? newValue) {
+                                    if (newValue != null) {
+                                      selectedQuantity.value = newValue;
+                                    }
+                                  },
+                                  items: quantityOptions
+                                      .map((int value) => DropdownMenuItem<int>(
+                                    value: value,
+                                    child: Text('$value'),
+                                  ))
+                                      .toList(),
+                                  buttonStyleData: ButtonStyleData(
+                                    height: 40,
+                                    width: 80,
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: Colors.black12),
+                                    ),
+                                  ),
+                                  dropdownStyleData: DropdownStyleData(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                );
+                              }),
+                            ],
+                          ),
+                          // Dropdown for Cut Type
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Cut Type',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium
+                                    ?.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 10),
+                              Obx(() {
+                                return DropdownButton2<String>(
+                                  underline: SizedBox.shrink(),
+                                  value: cutTypeOptions.isNotEmpty
+                                      ? selectedCutType.value
+                                      : null,
+                                  onChanged: cutTypeOptions.isNotEmpty
+                                      ? (String? newValue) {
+                                    if (newValue != null) {
+                                      selectedCutType.value = newValue;
+                                    }
+                                  }
+                                      : null,
+                                  items: cutTypeOptions.isNotEmpty
+                                      ? cutTypeOptions.map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList()
+                                      : null,
+                                  buttonStyleData: ButtonStyleData(
+                                    height: 40,
+                                    width: 120,
+                                    padding: EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: Colors.black12),
+                                    ),
+                                  ),
+                                  dropdownStyleData: DropdownStyleData(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(12),
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                );
+                              })
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 40),
+                      // "About this item" Heading
+                      Text(
+                        'About this item',
                         style: Theme.of(context)
                             .textTheme
                             .headlineSmall
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(height: 8),
+                      // Description
                       Text(
-                        '\u20B9${product['price']}',
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          decoration: TextDecoration.lineThrough,
-                          color: Colors.grey,
+                        product['description'] ?? 'No description available.',
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                      const SizedBox(height: 16),
+                      // 'You may also like', Heading
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20.0),
+                        child: Text(
+                          'You may also like:',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineSmall
+                              ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        '${product['discount']}% off' ?? '0',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineSmall
-                            ?.copyWith(color: Colors.red),
-                      ),
                     ],
                   ),
-                  const SizedBox(height: 16),
-                  // Qty and Cut type dropdown
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Dropdown for Quantity
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Quantity',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 10),
-                          Obx(() {
-                            return DropdownButton2<int>(
-                              underline: SizedBox.shrink(),
-                              value: selectedQuantity.value,
-                              onChanged: (int? newValue) {
-                                if (newValue != null) {
-                                  selectedQuantity.value = newValue;
-                                }
-                              },
-                              items: quantityOptions
-                                  .map((int value) => DropdownMenuItem<int>(
-                                value: value,
-                                child: Text('$value'),
-                              ))
-                                  .toList(),
-                              buttonStyleData: ButtonStyleData(
-                                height: 40,
-                                width: 80,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: Colors.black12),
-                                ),
-                              ),
-                              dropdownStyleData: DropdownStyleData(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.white,
-                                ),
-                              ),
-                            );
-                          }),
-                        ],
-                      ),
-                      // Dropdown for Cut Type
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Cut Type',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 10),
-                          Obx(() {
-                            return DropdownButton2<String>(
-                              underline: SizedBox.shrink(),
-                              value: selectedCutType.value, // Use `.value` to get the actual string
-                              onChanged: (String? newValue) {
-                                if (newValue != null) {
-                                  selectedCutType.value = newValue; // Update the reactive value
-                                }
-                              },
-                              items: cutTypeOptions
-                                  .map((String value) => DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              ))
-                                  .toList(),
-                              buttonStyleData: ButtonStyleData(
-                                height: 40,
-                                width: 120,
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  border: Border.all(color: Colors.black12),
-                                ),
-                              ),
-                              dropdownStyleData: DropdownStyleData(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(12),
-                                  color: Colors.white,
-                                ),
-                              ),
-                            );
-                          }),
-
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 40),
-                  // "About this item" Heading
-                  Text(
-                    'About this item',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineSmall
-                        ?.copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  // Description
-                  Text(
-                    product['description'] ?? 'No description available.',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                  const SizedBox(height: 16),
-                  // 'You may also like', Heading
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 20.0),
-                    child: Text(
-                      'You may also like:',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  ProductsSlideWidget(categoryId: '67531a520fde5d5d4cc4065d'),
-                  SizedBox(height: 200,),
-                ],
-              ),
+                ),
+                // Product Image (Swipe able Images)
+                ProductsSlideWidget(categoryId: '67531a520fde5d5d4cc4065d', willRefresh: false,),
+                SizedBox(
+                  height: 200,
+                ),
+              ],
             ),
           ),
           // Fixed bar to add to cart
@@ -231,7 +268,7 @@ class ProductInfoScreen extends StatelessWidget {
             left: 0,
             right: 0,
             child: Container(
-              height: 120, // Increased height to accommodate both price info and MRP text
+              height: 120,
               color: Colors.white,
               padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               child: Column(
@@ -247,10 +284,13 @@ class ProductInfoScreen extends StatelessWidget {
                         children: [
                           Text(
                             '\u20B9${product['price'] - product['discount']}',
-                            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green,
-                            ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineSmall
+                                ?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green,
+                                ),
                           ),
                           Text(
                             'MRP: \u20B9${product['price']} (Incl. of all taxes)',
@@ -272,14 +312,24 @@ class ProductInfoScreen extends StatelessWidget {
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
-                        child: const Row(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment
+                              .center, // Center content horizontally
+                          crossAxisAlignment: CrossAxisAlignment
+                              .center, // Center content vertically
                           children: [
-                            Text('Add'),
-                            SizedBox(width: 10,),
+                            Text('Add',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall
+                                    ?.copyWith(color: Colors.white)),
+                            SizedBox(
+                                width:
+                                    8), // Reduced spacing for better alignment
                             Icon(
-                              Icons.add, // Icon to represent the cart
+                              Icons.add,
                               color: Colors.white,
-                              size: 24,
+                              size: 20, // Adjust size to match the text
                             ),
                           ],
                         ),
@@ -296,5 +346,4 @@ class ProductInfoScreen extends StatelessWidget {
       ),
     );
   }
-
 }

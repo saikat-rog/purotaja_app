@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 class OnBoardingController {
   // Tracks the current image index
   var currentIndex = 0.obs;
-  var currentIndex2 = 0.obs;
 
   // List of onboarding images
   final List<String> onboardingImages = [
@@ -42,11 +41,14 @@ class OnBoardingController {
   void nextImage() {
     if (currentIndex.value < onboardingImages.length - 1) {
       currentIndex.value++;
-      currentIndex2.value++;
     } else {
       // Navigate to the next screen after the last image
       Get.offNamed('/auth');
     }
+  }
+
+  void onPageChanged(int index) {
+    currentIndex.value = index;
   }
 }
 
@@ -57,6 +59,8 @@ class OnBoardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    PageController _pageController = PageController();
+
     return Scaffold(
       body: Column(
         children: [
@@ -69,50 +73,49 @@ class OnBoardingScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // AnimatedSwitcher for image change with fade animation
+                      // PageView for image sliding
                       SizedBox(
                         height: 300,
-                        child: Obx(() => SvgPicture.asset(
-                              controller.onboardingImages[
-                                  controller.currentIndex.value],
-                              key: ValueKey<int>(controller.currentIndex
-                                  .value), // Key to trigger the animation
-                            )),
+                        child: PageView.builder(
+                          controller: _pageController,
+                          itemCount: controller.onboardingImages.length,
+                          onPageChanged: controller.onPageChanged,
+                          itemBuilder: (context, index) {
+                            return SvgPicture.asset(
+                              controller.onboardingImages[index],
+                              key: ValueKey<int>(index), // Key to trigger the animation
+                            );
+                          },
+                        ),
                       ),
-                      const SizedBox(
-                          height: 40), // Spacing between image and text
+                      const SizedBox(height: 40),
+                      // Heading text
                       Obx(() => Text(
-                            controller.onBoardingTextsHeading[
-                                controller.currentIndex.value],
-                            key: ValueKey<int>(controller.currentIndex.value),
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineLarge
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          )),
-                      const SizedBox(height: 10), // Spacing between lines
-                      Obx(() => Text(
-                            controller.onBoardingTextsSubHeading1[
-                                controller.currentIndex.value],
+                        controller.onBoardingTextsHeading[controller.currentIndex.value],
                         key: ValueKey<int>(controller.currentIndex.value),
-                            textAlign: TextAlign.center,
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          )),
+                        style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
+                      )),
+                      const SizedBox(height: 10),
+                      // Subheading text
+                      Obx(() => Text(
+                        controller.onBoardingTextsSubHeading1[controller.currentIndex.value],
+                        key: ValueKey<int>(controller.currentIndex.value),
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      )),
                     ],
                   ),
                 ),
               ),
             ),
           ),
-          // The indicator or slide image
+          // Slide indicator image
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Obx(
-              () => SvgPicture.asset(
-                key: ValueKey<int>(controller.currentIndex.value),
-                controller.slideImages[controller.currentIndex.value],
-              ),
-            ),
+            child: Obx(() => SvgPicture.asset(
+              key: ValueKey<int>(controller.currentIndex.value),
+              controller.slideImages[controller.currentIndex.value],
+            )),
           ),
           const SizedBox(height: 30),
           // NEXT button
@@ -124,11 +127,9 @@ class OnBoardingScreen extends StatelessWidget {
               child: ElevatedButton(
                 onPressed: controller.nextImage,
                 child: Obx(() {
-                  // Fix for showing the correct button text
                   return Text(
                     key: ValueKey<int>(controller.currentIndex.value),
-                    controller.currentIndex.value ==
-                            controller.onboardingImages.length - 1
+                    controller.currentIndex.value == controller.onboardingImages.length - 1
                         ? 'Get Started'
                         : 'Next',
                   );
@@ -145,10 +146,7 @@ class OnBoardingScreen extends StatelessWidget {
               },
               child: Text(
                 'Skip',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: Theme.of(context).primaryColor),
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).primaryColor),
               ),
             ),
           ),

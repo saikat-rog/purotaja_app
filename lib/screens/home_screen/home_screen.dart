@@ -81,8 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Container(
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.amber[200],),
               width: double.infinity,
-              color: Colors.amber[200],
               padding:
               const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
               child: const Row(
@@ -141,8 +141,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () {
                         homeController.changeSelectedOption(SelectedOptionState.bestSeller);
                       },
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
                             'Best Sellers',
@@ -150,13 +150,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          if (homeController.selectedOptionState.value == SelectedOptionState.bestSeller)
-                            Container(
-                              height: 2,
-                              width: 100,
-                              color: Colors.black,
-                              margin: const EdgeInsets.only(top: 4),
-                            ),
+                          const SizedBox(height: 4),
+                          Container(
+                            height: 2,
+                            width: 120, // Consistent width for underline
+                            color: homeController.selectedOptionState.value ==
+                                SelectedOptionState.bestSeller
+                                ? Colors.black
+                                : Colors.transparent,
+                          ),
                         ],
                       ),
                     ),
@@ -166,8 +168,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () {
                         homeController.changeSelectedOption(SelectedOptionState.recommended);
                       },
-                      child: Stack(
-                        alignment: Alignment.bottomCenter,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
                             'Recommended',
@@ -175,13 +177,15 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          if (homeController.selectedOptionState.value == SelectedOptionState.recommended)
-                            Container(
-                              height: 2,
-                              width: 120,
-                              color: Colors.black,
-                              margin: const EdgeInsets.only(top: 4),
-                            ),
+                          const SizedBox(height: 4),
+                          Container(
+                            height: 2,
+                            width: 120, // Consistent width for underline
+                            color: homeController.selectedOptionState.value ==
+                                SelectedOptionState.recommended
+                                ? Colors.black
+                                : Colors.transparent,
+                          ),
                         ],
                       ),
                     ),
@@ -225,9 +229,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Obx(() {
       switch (homeController.selectedOptionState.value) {
         case SelectedOptionState.bestSeller:
-          return ProductsSlideWidget(categoryId: '67531a520fde5d5d4cc4065d', key: const ValueKey('bestSeller'));
+          return ProductsSlideWidget(categoryId: '67531a520fde5d5d4cc4065d', key: const ValueKey('bestSeller'), willRefresh: true,);
         case SelectedOptionState.recommended:
-          return ProductsSlideWidget(categoryId: '67531a520fde5d5d4cc4065d', key: const ValueKey('recommended'));
+          return ProductsSlideWidget(categoryId: '67531a520fde5d5d4cc4065d', key: const ValueKey('recommended'), willRefresh: true,);
         default:
           return const SizedBox.shrink();
       }

@@ -104,18 +104,18 @@ class AddressController extends GetxController {
       String label,
       bool isDefault) async {
     isLoading.value = true; // Set loading to true before starting the API call
+    final addressData = {
+      "address": addressController.text,
+      "street": streetController.text,
+      "appartment": apartmentController.text,
+      "postalCode": postalCodeController.text,
+      "label": label,
+      "isDefault": isDefault,
+    };
     try {
       final userId = userController.user.value.id;
-      final addressData = {
-        "address": addressController.text.trim(),
-        "street": streetController.text.trim(),
-        "appartment": apartmentController.text.trim(),
-        "postalCode": postalCodeController.text.trim(),
-        "label": label,
-        "isDefault": isDefault,
-      };
       await userApi.updateUserAddresses(userId, addressId, addressData);
-      await fetchAddresses();
+      fetchAddresses();
     } catch (e) {
       // Handle any errors (optional)
       Get.snackbar("Error", "Failed to update address.");

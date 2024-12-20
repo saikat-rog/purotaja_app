@@ -234,7 +234,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     child: RichText(
                       text: TextSpan(
                         text:
-                            'Already have an account?? ', // First part of the text
+                            'Already have an account?', // First part of the text
                         style: Theme.of(context)
                             .textTheme
                             .bodyMedium, // Style for the first part

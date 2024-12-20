@@ -7,20 +7,22 @@ import '../../../../controllers/address_controller.dart';
 class EditAddressScreen extends StatefulWidget {
   final String addressId;
 
-  EditAddressScreen({Key? key, required this.addressId}) : super(key: key);
+  const EditAddressScreen({super.key, required this.addressId});
 
   @override
   State<EditAddressScreen> createState() => _EditAddressScreenState();
 }
 
 class _EditAddressScreenState extends State<EditAddressScreen> {
-
   AddressController addressController = Get.put(AddressController());
 
   final addressFieldController = TextEditingController();
   final streetController = TextEditingController();
   final apartmentController = TextEditingController();
   final postalCodeController = TextEditingController();
+
+  // Track selected label
+  String selectedLabel = 'HOME';
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30),
         child: SingleChildScrollView(
+          //Text fields
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -67,67 +70,16 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
               ),
               const SizedBox(height: 16),
 
-              //Label
+              // Label
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      addressController.label.value = "HOME"; // Update the value when tapped
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: AppTheme.bgGrey,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-                        child: Text(
-                          "HOME",
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      addressController.label.value = "WORK"; // Update the value when tapped
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: AppTheme.bgGrey,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-                        child: Text(
-                          "WORK",
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      addressController.label.value = "OTHER"; // Update the value when tapped
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
-                        color: AppTheme.bgGrey,
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-                        child: Text(
-                          "OTHER",
-                          style: Theme.of(context).textTheme.headlineSmall,
-                        ),
-                      ),
-                    ),
-                  ),
+                  _buildLabelButton('HOME'),
+                  _buildLabelButton('WORK'),
+                  _buildLabelButton('OTHER'),
                 ],
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 20),
 
               // Default Address Toggle
               Obx(() => Row(
@@ -155,7 +107,13 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                     onPressed: () {
                       // Call the updateAddress function from the controller
                       addressController.updateAddress(
-                        widget.addressId, addressFieldController, streetController, apartmentController, postalCodeController, addressController.label.value ,addressController.isDefault.value,
+                        widget.addressId,
+                        addressFieldController,
+                        streetController,
+                        apartmentController,
+                        postalCodeController,
+                        selectedLabel,
+                        addressController.isDefault.value,
                       );
                       Get.back(); // Go back after updating
                     },
@@ -164,6 +122,37 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                 ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Label Button Widget with dynamic background color
+  Widget _buildLabelButton(String label) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedLabel = label; // Update selected label
+          addressController.label.value = label; // Update controller label
+        });
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: selectedLabel == label
+              ? AppTheme.lightTheme.primaryColor // Set background to primary color when selected
+              : AppTheme.bgGrey, // Default background color
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+          child: Text(
+            label,
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              color: selectedLabel == label
+                  ? Colors.white // Text color when selected
+                  : Colors.black, // Default text color
+            ),
           ),
         ),
       ),
@@ -184,7 +173,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
         ),
         const SizedBox(height: 8),
         TextField(
-          controller: TextEditingController(),
+          controller: controller,
           decoration: InputDecoration(
             filled: true,
             fillColor: AppTheme.bgGrey, // Set your desired background color
