@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RectangularContainerSkeletonPlaceholder extends StatefulWidget {
-  final double height;
-  const RectangularContainerSkeletonPlaceholder({super.key, required this.height});
+  final BuildContext context;
+  const RectangularContainerSkeletonPlaceholder({super.key, required this.context});
 
   @override
   _RectangularContainerSkeletonPlaceholderState createState() =>
@@ -14,12 +13,12 @@ class _RectangularContainerSkeletonPlaceholderState
     extends State<RectangularContainerSkeletonPlaceholder> {
   @override
   Widget build(BuildContext context) {
-    double height = widget.height;// Adjust as needed
+    double screenWidth = MediaQuery.of(context).size.width;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      padding: EdgeInsets.symmetric(horizontal: screenWidth*0.08),
       child: SizedBox(
-        height: height,
+        height: screenWidth*0.5,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           itemCount: 6, // Show a fixed number of placeholders
@@ -31,8 +30,8 @@ class _RectangularContainerSkeletonPlaceholderState
                 children: [
                   // Skeleton for image
                   Container(
-                    width: 150,
-                    height: 150,
+                    width: screenWidth*0.4,
+                    height: screenWidth*0.3,
                     decoration: BoxDecoration(
                       color: Colors.grey.shade300,
                       borderRadius: BorderRadius.circular(8),
@@ -41,33 +40,16 @@ class _RectangularContainerSkeletonPlaceholderState
                   const SizedBox(height: 8),
                   // Skeleton for name
                   Container(
-                    height: 10,
-                    width: 100,
+                    height: screenWidth * 0.03,
+                    width: screenWidth * 0.3, // 30% of screen width
                     color: Colors.grey.shade300,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
                   // Skeleton for description
                   Container(
-                    height: 10,
-                    width: 80,
+                    height: screenWidth * 0.05,
+                    width: screenWidth * 0.3, // 30% of screen width
                     color: Colors.grey.shade300,
-                  ),
-                  const SizedBox(height: 8),
-                  // Skeleton for price
-                  Row(
-                    children: [
-                      Container(
-                        height: 10,
-                        width: 50,
-                        color: Colors.grey.shade300,
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        height: 10,
-                        width: 50,
-                        color: Colors.grey.shade300,
-                      ),
-                    ],
                   ),
                 ],
               ),

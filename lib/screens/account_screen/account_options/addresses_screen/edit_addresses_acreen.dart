@@ -163,7 +163,7 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           color: addressController.address['label'] == label
-              ? AppTheme.lightTheme.primaryColor // Set background to primary color when selected
+              ? AppTheme.lightTheme(context).primaryColor // Set background to primary color when selected
               : AppTheme.bgGrey, // Default background color
         ),
         child: Padding(

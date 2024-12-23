@@ -11,12 +11,14 @@ class CategoriesSlideWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    double screenWidth = MediaQuery.of(context).size.width;
     return Obx(() {
       if (categoryController.isLoading.value) {
         return const RoundedSkeletonPlaceholder();
       } else {
         return SizedBox(
-          height: 100,
+          height: screenWidth*0.2,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: categoryController.categories.length,
@@ -31,12 +33,12 @@ class CategoriesSlideWidget extends StatelessWidget {
                             child: Image.network(
                               category['image'][0]['url'],
                               fit: BoxFit.cover,
-                              width: 70,
-                              height: 70,
+                              width: screenWidth*0.15,
+                              height: screenWidth*0.15,
                             ),
                           )
                         : ClipOval(
-                      child: Icon(Icons.beach_access, size: 70,)
+                      child: Icon(Icons.beach_access, size: screenWidth*0.15,)
                     ),
                     const SizedBox(height: 4),
                     Text(

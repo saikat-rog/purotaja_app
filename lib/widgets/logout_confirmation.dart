@@ -17,8 +17,9 @@ class LogoutConfirmation extends StatefulWidget {
 class _LogoutConfirmationState extends State<LogoutConfirmation> {
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      height: 200, // Height of the bottom sheet
+      height: screenWidth*0.5, // Height of the bottom sheet
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -26,7 +27,7 @@ class _LogoutConfirmationState extends State<LogoutConfirmation> {
         children: [
           Text(
             'Are you sure you want to log out?',
-            style: TextStyle(fontSize: 18),
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
           SizedBox(height: 20),
           Column(
@@ -39,7 +40,7 @@ class _LogoutConfirmationState extends State<LogoutConfirmation> {
                   onPressed: () {
                     Get.back(); // Close the bottom sheet without logging out
                   },
-                  child: Text('Stay logged in'),
+                  child: Text('Stay logged in', style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: Colors.white),),
                 ),
               ),
               SizedBox(height: 10),

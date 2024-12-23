@@ -19,99 +19,110 @@ class _CategoryScreenState extends State<CategoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Category',
-          style: Theme.of(context).textTheme.headlineMedium,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Category',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            GestureDetector(onTap:(){
+              //searches
+            }, child: Icon(Icons.search, size: screenWidth*0.07)),
+          ],
         ),
-        elevation: 0,
-        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
-        toolbarHeight: 60,
+        scrolledUnderElevation: 0,
+        toolbarHeight: screenWidth*0.15,
       ),
       // Row for dividing left and right pane
       body: Row(
         children: [
           // Left Pane for Categories
           Container(
-            width: 90,
+            width: screenWidth * 0.2,
             decoration: const BoxDecoration(
+              color: Colors.white,
               border: Border(
                 right: BorderSide(color: Colors.black12, width: 2.0),
               ),
             ),
-            // The Categories list in the left pane
             child: Obx(() {
               return ListView.builder(
                 itemCount: categoryController.categories.length,
                 itemBuilder: (context, index) {
                   final category = categoryController.categories[index];
+                  final isSelected = selectedCategoryIndex == index;
                   return GestureDetector(
                     onTap: () {
                       setState(() {
                         selectedCategoryIndex = index; // Update selected index
                       });
                       productsController.getAllProductsFromCategoryByCategoryId(
-                          categoryController.categories[selectedCategoryIndex]
-                                  ['id']
-                              .toString());
+                        categoryController.categories[selectedCategoryIndex]['id'].toString(),
+                      );
                     },
-                    // Left pane each item container
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Category icon
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              left: 3.0, top: 15, bottom: 15),
-                          child: Container(
-                            width: 70,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: category['image'] != null &&
-                                          category['image'].isNotEmpty
-                                      ? Image.network(
-                                          category['image'][0]['url'],
-                                          fit: BoxFit.cover,
-                                          width: 50,
-                                          height: 50,
-                                        )
-                                      : const Icon(Icons.image, size: 40),
-                                ),
-                                const SizedBox(height: 1),
-                                Center(
-                                  child: Text(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: screenWidth * 0.04),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Category Icon and Name
+                          Padding(
+                            padding: EdgeInsets.only(left: screenWidth * 0.02),
+                            child: Container(
+                              width: screenWidth * 0.13,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: category['image'] != null &&
+                                        category['image'].isNotEmpty
+                                        ? Image.network(
+                                      category['image'][0]['url'],
+                                      fit: BoxFit.cover,
+                                      height: screenWidth * 0.1,
+                                      width: screenWidth * 0.1,
+                                    )
+                                        : Icon(Icons.image, size: screenWidth * 0.1, color: Colors.grey),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
                                     category['name'],
-                                    style:
-                                        Theme.of(context).textTheme.bodySmall,
+                                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                      color: isSelected
+                                          ? Theme.of(context).primaryColor
+                                          : Colors.black87,
+                                    ),
                                     textAlign: TextAlign.center,
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        // Selection bar
-                        if (selectedCategoryIndex == index)
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(500),
-                                bottomLeft: Radius.circular(500),
+                          // Selection Bar on the Right Side
+                          if (isSelected)
+                            Container(
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(500),
+                                  bottomLeft: Radius.circular(500),
+                                ),
+                                color: Theme.of(context).primaryColor,
                               ),
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            height: 100,
-                            width: 5,
-                          )
-                        else
-                          const SizedBox(width: 5), // Placeholder for spacing
-                      ],
+                              height: screenWidth * 0.15,
+                              width: 5,
+                            )
+                          else
+                            const SizedBox(width: 5), // Placeholder for spacing
+                        ],
+                      ),
                     ),
                   );
                 },
@@ -125,75 +136,122 @@ class _CategoryScreenState extends State<CategoryScreen> {
               if (productsController.isLoading.value) {
                 return GridSkeletonWidget();
               } else if (productsController.products.isEmpty) {
-                return const Center(child: Text("No products available"));
-              } else {
-                return GridView.builder(
-                  gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // Number of items per row
-                    crossAxisSpacing: 2.0, // Horizontal spacing
-                    mainAxisSpacing: 5.0, // Vertical spacing
-                    mainAxisExtent: 300,
-                    childAspectRatio:
-                        1, // Adjust aspect ratio to match item dimensions
+                return const Center(
+                  child: Text(
+                    "No products available",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                   ),
-                  itemCount: productsController.products.length,
-                  itemBuilder: (context, index) {
-                    final product = productsController.products[index];
-                    return GestureDetector(
-                      onTap: (){
-                        Get.toNamed('/product/${product['id']}');
-                      },
-                      child: Container(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 140,
-                                width: 140,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(8),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.3),
-                                      blurRadius: 5,
-                                      spreadRadius: 2,
-                                    ),
-                                  ],
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                );
+              } else {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+                  child: GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // 2 items per row
+                      crossAxisSpacing: 16.0, // Horizontal spacing between items
+                      mainAxisSpacing: 2.0, // Vertical spacing between items
+                      childAspectRatio: 0.59, // Adjust card height-to-width ratio
+                    ),
+                    itemCount: productsController.products.length,
+                    itemBuilder: (context, index) {
+                      final product = productsController.products[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Get.toNamed('/product/${product['id']}');
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: screenWidth*0.3,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.2),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
                                     child: Image.network(
-                                      product['image'][0]
-                                          ['url'], // Fetch image dynamically
-                                      width: double.infinity,
-                                      height: double.infinity,
+                                      product['image'][0]['url'],
                                       fit: BoxFit.fitWidth,
                                     ),
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 5,),
-                              Text(product['name'],style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),),
-                              Text(
-                                '\u20B9${product['price']}/kg',
-                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(height: 4),
+                            // Product Name
+                            Row(
+                              children: [
+                                Text(
+                                  product['name'],
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineSmall
+                                      ?.copyWith(fontWeight: FontWeight.w600),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              product['description'],
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium,
+                              maxLines: 2,
+                              softWrap: true,
+                            ),
+                            // Product Price
+                            Row(
+                              children: [
+                                Text(
+                                  '\u20B9${product['price'] - (product['discount'] ?? 0)}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.copyWith(fontWeight: FontWeight.bold),
+                                ),
+                                if ((product['discount'] ?? 0) > 0) ...[
+                                  SizedBox(width: screenWidth*0.01),
+                                  Text(
+                                    '\u20B9${product['price']}',
+                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      decoration: TextDecoration.lineThrough,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  SizedBox(width: screenWidth*0.01),
+                                  Text(
+                                    '${product['discount']}% off',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(color: Colors.red),
+                                  ),
+                                ],
+                              ],
+                            ),
+                          ],
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 );
               }
             }),
-          ),
+          )
+
         ],
       ),
     );

@@ -92,6 +92,7 @@ flutter:
     - assets/profile_assets/logout.svg
     - assets/profile_assets/email.svg
     - assets/profile_assets/phone.svg
+    - assets/profile_assets/option_arrow.svg
     - assets/profile_assets/addresses/home.svg
     - assets/profile_assets/addresses/work.svg
     - assets/profile_assets/addresses/edit.svg

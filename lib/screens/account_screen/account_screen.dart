@@ -72,6 +72,9 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: Center(
         child: SingleChildScrollView(
@@ -82,19 +85,19 @@ class _AccountScreenState extends State<AccountScreen> {
               child: Column(
                 children: [
                   // Name and Photo container
-                  _buildUserInfo(),
+                  _buildUserInfo(context),
                   const SizedBox(height: 20),
                   // Account Options List1
-                  _buildAccountOptionsList(accountsOption1),
+                  _buildAccountOptionsList(accountsOption1, context),
                   const SizedBox(height: 20),
                   // Account Options List2
-                  _buildAccountOptionsList(accountsOption2),
+                  _buildAccountOptionsList(accountsOption2, context),
                   const SizedBox(height: 20),
                   // Account Options List3
-                  _buildAccountOptionsList(accountsOption3),
+                  _buildAccountOptionsList(accountsOption3, context),
                   const SizedBox(height: 20),
                   // Account Options List4 (Logout)
-                  _buildAccountOptionsList(accountsOption4),
+                  _buildAccountOptionsList(accountsOption4, context),
                 ],
               ),
             ),
@@ -105,16 +108,18 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   // Builds user info section (Name and Photo)
-  Widget _buildUserInfo() {
+  Widget _buildUserInfo(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Container(
       width: double.infinity,
       child: Row(
         children: [
           // Photo
           Container(
-            child: const Icon(
+            child: Icon(
               Icons.person,
-              size: 120,
+              size: screenHeight*0.1,
               color: Colors.black12,
             ),
           ),
@@ -146,14 +151,16 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   // Builds a list of account options
-  Widget _buildAccountOptionsList(List<Map<String, dynamic>> options) {
+  Widget _buildAccountOptionsList(List<Map<String, dynamic>> options, BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: AppTheme.bgGrey,
       ),
       child: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
+        padding: EdgeInsets.symmetric(vertical: screenHeight*0.01),
         shrinkWrap: true, // Ensures the ListView fits inside the parent
         physics: const NeverScrollableScrollPhysics(), // Prevents internal scrolling
         itemCount: options.length,
@@ -163,8 +170,6 @@ class _AccountScreenState extends State<AccountScreen> {
             onTap: () {
               if (item['text'] == 'Logout') {
                 _showLogoutConfirmation(context);
-                // authService.setAuthenticationStatus(false);
-                // Get.offNamed('/auth');
               } else {
                 Get.toNamed(item['route']);
               }
@@ -176,15 +181,15 @@ class _AccountScreenState extends State<AccountScreen> {
                 children: [
                   Row(
                     children: [
-                      _buildOptionIcon(item['icon']),
+                      _buildOptionIcon(item['icon'], context),
                       const SizedBox(width: 20),
                       Text(
                         item['text'],
-                        style: Theme.of(context).textTheme.headlineSmall,
+                        style: Theme.of(context).textTheme.bodyLarge,
                       ),
                     ],
                   ),
-                  const Icon(Icons.arrow_forward),
+                  SvgPicture.asset('assets/profile_assets/option_arrow.svg'),
                 ],
               ),
             ),
@@ -196,17 +201,19 @@ class _AccountScreenState extends State<AccountScreen> {
 
 
   // Builds the icon for each account option
-  Widget _buildOptionIcon(String iconPath) {
+  Widget _buildOptionIcon(String iconPath, BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
-      height: 40,
-      width: 40,
+      height: screenWidth*0.1,
+      width: screenWidth*0.1,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.white,
       ),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: SvgPicture.asset(iconPath, height: 30),
+        child: SvgPicture.asset(iconPath),
       ),
     );
   }

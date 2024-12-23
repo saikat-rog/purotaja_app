@@ -17,10 +17,14 @@ class _AddressScreenState extends State<AddressScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Addresses"),
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
+        scrolledUnderElevation: 0,
       ),
       body: Stack(
         children: [
@@ -33,21 +37,22 @@ class _AddressScreenState extends State<AddressScreen> {
                     // Address boxes
                     itemBuilder: (context, index) {
                       return Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: EdgeInsets.symmetric(horizontal: screenWidth*0.05, vertical: screenWidth*0.02),
                         child: Container(
+                          height: screenWidth*0.3,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             color: AppTheme.bgGrey,
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(20.0),
+                            padding: EdgeInsets.all(screenWidth*0.05),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment
                                   .start, // Aligns the row items properly
                               children: [
                                 // Label Logo
                                 Container(
-                                  width: 40.0, // Set your desired width
+                                  width: screenWidth*0.1, // Set your desired width
                                   height: 40.0, // Set your desired height
                                   decoration: const BoxDecoration(
                                     color: Colors.white, // White background
@@ -85,7 +90,7 @@ class _AddressScreenState extends State<AddressScreen> {
                                               ),
                                   ),
                                 ),
-                                SizedBox(width: 30),
+                                SizedBox(width: screenWidth*0.04),
                                 // The address
                                 Expanded(
                                   child: Column(
@@ -115,7 +120,7 @@ class _AddressScreenState extends State<AddressScreen> {
                                                   child: SvgPicture.asset(
                                                       'assets/profile_assets/addresses/edit.svg')),
                                               SizedBox(
-                                                width: 20,
+                                                width: screenWidth*0.08,
                                               ),
                                               // Delete Button
                                               GestureDetector(
@@ -135,12 +140,14 @@ class _AddressScreenState extends State<AddressScreen> {
                                           )
                                         ],
                                       ),
-                                      SizedBox(width: 8),
+                                      SizedBox(height: screenWidth*0.02),
                                       Text(
                                         '${addressController.addresses[index]['street']}, '
                                         '${addressController.addresses[index]['address']}, '
                                         '${addressController.addresses[index]['postalCode']}',
                                         softWrap: true, // Allow text to wrap
+                                        maxLines: 3,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ],
                                   ),
@@ -161,12 +168,12 @@ class _AddressScreenState extends State<AddressScreen> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Container(
-                height: 70,
+                height: screenWidth*0.14,
                 child: ElevatedButton(
                   onPressed: () {
                     Get.toNamed('/addAddresses');
                   },
-                  child: Text('Add Addresses'),
+                  child: Text('Add Addresses', style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Colors.white),),
                 ),
               ),
             ),

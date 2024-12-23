@@ -5,12 +5,10 @@ class GridSkeletonWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, // Number of items per row
-        crossAxisSpacing: 2.0, // Horizontal spacing
-        mainAxisSpacing: 4.0, // Vertical spacing
-        mainAxisExtent: 400,
-        childAspectRatio:
-        1, // Ensures the item size is square
+        crossAxisCount: 2, // 2 items per row
+        crossAxisSpacing: 16.0, // Horizontal spacing between items
+        mainAxisSpacing: 16.0, // Vertical spacing between items
+        childAspectRatio: 0.59,
       ),
       itemCount: 5, // Number of placeholder items
       itemBuilder: (context, index) {
@@ -21,8 +19,7 @@ class GridSkeletonWidget extends StatelessWidget {
             children: [
               // Placeholder for image
               Container(
-                height: 140,
-                width: 140,
+                height: 100,
                 decoration: BoxDecoration(
                   color: Colors.grey.shade300,
                   borderRadius: BorderRadius.circular(8),
@@ -30,6 +27,13 @@ class GridSkeletonWidget extends StatelessWidget {
               ),
               SizedBox(height: 5),
               // Placeholder for name text
+              Container(
+                height: 20,
+                color: Colors.grey.shade300,
+                width: double.infinity,
+              ),
+              SizedBox(height: 5),
+              //Placeholder for description
               Container(
                 height: 20,
                 color: Colors.grey.shade300,

@@ -36,13 +36,10 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
         ? Rx<String>(cutTypeOptions[0])
         : Rx<String>('No options available');
 
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(product['name'] ?? 'Product Info'),
-        elevation: 0,
-        backgroundColor: Colors.white,
-        toolbarHeight: 60,
-      ),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -50,6 +47,24 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 40),
+                //Product name
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.04,
+                      vertical: screenHeight * 0.03),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        product['name'] ?? 'Product Name',
+                        style: Theme.of(context).textTheme.headlineMedium,
+                      ),
+                      Text(product['description'] ?? 'Product description',
+                          style: Theme.of(context).textTheme.bodyMedium,
+                          overflow: TextOverflow.ellipsis),
+                    ],
+                  ),
+                ),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Column(
@@ -57,37 +72,29 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                     children: [
                       Container(
                         width: double.infinity,
-                        height: 200,
+                        height: screenHeight * 0.3,
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: product['image'] != null && product['image'].isNotEmpty
+                        child: product['image'] != null &&
+                                product['image'].isNotEmpty
                             ? PageView.builder(
-                          itemCount: product['image'].length,
-                          itemBuilder: (context, index) {
-                            return Image.network(
-                              product['image'][index]['url'],
-                              fit: BoxFit.fitHeight,
-                            );
-                          },
-                        )
+                                itemCount: product['image'].length,
+                                itemBuilder: (context, index) {
+                                  return Image.network(
+                                    product['image'][index]['url'],
+                                    fit: BoxFit.fitHeight,
+                                  );
+                                },
+                              )
                             : const Icon(
-                          Icons.image,
-                          size: 80,
-                          color: Colors.grey,
-                        ),
+                                Icons.image,
+                                size: 80,
+                                color: Colors.grey,
+                              ),
                       ),
                       const SizedBox(height: 25),
-                      // Product Name
-                      Text(
-                        product['name'] ?? 'Unknown Product',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineLarge
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 10),
                       // Price and Discount
                       Row(
                         children: [
@@ -95,25 +102,27 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                             '\u20B9${product['price'] - (product['discount'] ?? 0)}',
                             style: Theme.of(context)
                                 .textTheme
-                                .headlineSmall
+                                .headlineMedium
                                 ?.copyWith(fontWeight: FontWeight.bold),
                           ),
                           if ((product['discount'] ?? 0) > 0) ...[
                             const SizedBox(width: 8),
                             Text(
                               '\u20B9${product['price']}',
-                              style:
-                              Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                decoration: TextDecoration.lineThrough,
-                                color: Colors.grey,
-                              ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineMedium
+                                  ?.copyWith(
+                                    decoration: TextDecoration.lineThrough,
+                                    color: Colors.grey,
+                                  ),
                             ),
                             const SizedBox(width: 8),
                             Text(
                               '${product['discount']}% off',
                               style: Theme.of(context)
                                   .textTheme
-                                  .headlineSmall
+                                  .headlineMedium
                                   ?.copyWith(color: Colors.red),
                             ),
                           ],
@@ -135,7 +144,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                                     .bodyMedium
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: 10),
+                              SizedBox(height: screenHeight * 0.02),
                               Obx(() {
                                 return DropdownButton2<int>(
                                   underline: SizedBox.shrink(),
@@ -147,14 +156,20 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                                   },
                                   items: quantityOptions
                                       .map((int value) => DropdownMenuItem<int>(
-                                    value: value,
-                                    child: Text('$value'),
-                                  ))
+                                            value: value,
+                                            child: Text(
+                                              '$value',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge,
+                                            ),
+                                          ))
                                       .toList(),
                                   buttonStyleData: ButtonStyleData(
-                                    height: 40,
-                                    width: 80,
-                                    padding: EdgeInsets.all(10),
+                                    height: screenHeight * 0.05,
+                                    width: screenWidth * 0.2,
+                                    padding:
+                                        EdgeInsets.all(screenWidth * 0.015),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
                                       border: Border.all(color: Colors.black12),
@@ -181,45 +196,48 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                                     .bodyMedium
                                     ?.copyWith(fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: 10),
-                              Obx(() {
-                                return DropdownButton2<String>(
-                                  underline: SizedBox.shrink(),
-                                  value: cutTypeOptions.isNotEmpty
-                                      ? selectedCutType.value
-                                      : null,
-                                  onChanged: cutTypeOptions.isNotEmpty
-                                      ? (String? newValue) {
-                                    if (newValue != null) {
-                                      selectedCutType.value = newValue;
-                                    }
-                                  }
-                                      : null,
-                                  items: cutTypeOptions.isNotEmpty
-                                      ? cutTypeOptions.map((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList()
-                                      : null,
-                                  buttonStyleData: ButtonStyleData(
-                                    height: 40,
-                                    width: 120,
-                                    padding: EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(color: Colors.black12),
-                                    ),
+                              SizedBox(height: screenHeight * 0.02),
+                              DropdownButton2<String>(
+                                underline: SizedBox.shrink(),
+                                value: cutTypeOptions.isNotEmpty
+                                    ? selectedCutType.value
+                                    : null,
+                                onChanged: cutTypeOptions.isNotEmpty
+                                    ? (String? newValue) {
+                                        if (newValue != null) {
+                                          selectedCutType.value = newValue;
+                                        }
+                                      }
+                                    : null,
+                                items: cutTypeOptions.isNotEmpty
+                                    ? cutTypeOptions.map((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(
+                                            value,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium,
+                                          ),
+                                        );
+                                      }).toList()
+                                    : null,
+                                buttonStyleData: ButtonStyleData(
+                                  height: screenHeight * 0.06,
+                                  width: screenWidth * 0.3,
+                                  padding: EdgeInsets.all(screenWidth * 0.015),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(color: Colors.black12),
                                   ),
-                                  dropdownStyleData: DropdownStyleData(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      color: Colors.white,
-                                    ),
+                                ),
+                                dropdownStyleData: DropdownStyleData(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Colors.white,
                                   ),
-                                );
-                              })
+                                ),
+                              )
                             ],
                           ),
                         ],
@@ -255,7 +273,11 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                   ),
                 ),
                 // Product Image (Swipe able Images)
-                ProductsSlideWidget(categoryId: '67531a520fde5d5d4cc4065d', willRefresh: false,),
+                ProductsSlideWidget(
+                  categoryId: '67531a520fde5d5d4cc4065d',
+                  willRefresh: false,
+                  context: context,
+                ),
                 SizedBox(
                   height: 200,
                 ),
@@ -268,7 +290,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
             left: 0,
             right: 0,
             child: Container(
-              height: 120,
+              height: screenWidth * 0.3,
               color: Colors.white,
               padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               child: Column(
@@ -293,13 +315,8 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                                 ),
                           ),
                           Text(
-                            'MRP: \u20B9${product['price']} (Incl. of all taxes)',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+                              'MRP: \u20B9${product['price']} (Incl. of all taxes)',
+                              style: Theme.of(context).textTheme.bodyMedium),
                         ],
                       ),
                       ElevatedButton(
@@ -307,7 +324,8 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                           // Add to cart functionality goes here
                         },
                         style: ElevatedButton.styleFrom(
-                          minimumSize: Size(120, 50),
+                          minimumSize:
+                              Size(screenWidth * 0.04, screenWidth * 0.1),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           ),
@@ -329,7 +347,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                             Icon(
                               Icons.add,
                               color: Colors.white,
-                              size: 20, // Adjust size to match the text
+                              size: screenWidth*0.05, // Adjust size to match the text
                             ),
                           ],
                         ),

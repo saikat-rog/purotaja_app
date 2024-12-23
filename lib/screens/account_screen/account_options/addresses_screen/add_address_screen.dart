@@ -24,13 +24,16 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Address'),
+        title: Text('Add Address', style: Theme.of(context).textTheme.headlineMedium),
         backgroundColor: Colors.transparent,
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 30.0, vertical: 30),
+        padding: const EdgeInsets.symmetric(horizontal: 30.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,32 +43,35 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                 controller: addressFieldController,
                 label: 'Address',
                 hint: 'Enter your address',
+                context: context
               ),
-              const SizedBox(height: 16),
-
+              SizedBox(height: screenHeight*0.02),
               // Street TextField
               _buildTextField(
                 controller: streetController,
                 label: 'Street',
                 hint: 'Enter street name',
+                context: context
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: screenHeight*0.02),
 
               // Apartment TextField
               _buildTextField(
                 controller: apartmentController,
                 label: 'Apartment',
                 hint: 'Enter apartment number or name',
+                context: context
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: screenHeight*0.02),
 
               // Postal Code TextField
               _buildTextField(
                 controller: postalCodeController,
                 label: 'Postal Code',
                 hint: 'Enter postal code',
+                context: context
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: screenHeight*0.02),
 
               // Label Selector
               Row(
@@ -88,7 +94,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                   ),
                   Text(
                     'Set as Default',
-                    style: Theme.of(context).textTheme.headlineSmall,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                 ],
               )),
@@ -99,7 +105,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 8.00),
                 child: SizedBox(
                   width: double.infinity,
-                  height: 60,
+                  height: screenWidth*0.13,
                   child: ElevatedButton(
                     onPressed: () {
                       // Call the createAddress function from the controller
@@ -136,7 +142,7 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15),
           color: selectedLabel == label
-              ? AppTheme.lightTheme.primaryColor // Highlight selected label
+              ? AppTheme.lightTheme(context).primaryColor // Highlight selected label
               : AppTheme.bgGrey, // Default background color
         ),
         padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -154,27 +160,36 @@ class _AddAddressScreenState extends State<AddAddressScreen> {
     required TextEditingController controller,
     required String label,
     required String hint,
+    required BuildContext context
   }) {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label.toUpperCase(),
-          style: Theme.of(context).textTheme.headlineSmall,
+          label,
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 12),
         ),
-        const SizedBox(height: 8),
-        TextField(
-          controller: controller,
-          decoration: InputDecoration(
-            filled: true,
-            fillColor: AppTheme.bgGrey, // Set your desired background color
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none, // No visible border
+        const SizedBox(height: 6),
+        SizedBox(
+          height: screenWidth*0.13, // Reduced height for the TextField
+          child: TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: AppTheme.bgGrey, // Set your desired background color
+              hintText: hint,
+              contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8), // Reduced corner radius
+                borderSide: BorderSide.none, // No visible border
+              ),
             ),
+            style: Theme.of(context).textTheme.bodyMedium?.copyWith(fontSize: 14),
           ),
         ),
       ],
     );
   }
+
 }

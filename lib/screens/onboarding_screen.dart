@@ -3,10 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class OnBoardingController {
-  // Tracks the current image index
   var currentIndex = 0.obs;
 
-  // List of onboarding images
   final List<String> onboardingImages = [
     'assets/onboarding1.svg',
     'assets/onboarding2.svg',
@@ -31,18 +29,10 @@ class OnBoardingController {
     'Enjoy clean, nutritious fish packed with care for your family.',
   ];
 
-  final List<String> onBoardingTextsSubHeading2 = [
-    'straight from the waters to your home.',
-    'on time.',
-    'care for your family.',
-  ];
-
-  // Function to go to the next image
   void nextImage() {
     if (currentIndex.value < onboardingImages.length - 1) {
       currentIndex.value++;
     } else {
-      // Navigate to the next screen after the last image
       Get.offNamed('/auth');
     }
   }
@@ -59,71 +49,78 @@ class OnBoardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
     PageController _pageController = PageController();
 
     return Scaffold(
       body: Column(
         children: [
-          // The content of the screen (image, texts)
           Expanded(
             child: Center(
               child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // PageView for image sliding
-                      SizedBox(
-                        height: 300,
-                        child: PageView.builder(
-                          controller: _pageController,
-                          itemCount: controller.onboardingImages.length,
-                          onPageChanged: controller.onPageChanged,
-                          itemBuilder: (context, index) {
-                            return SvgPicture.asset(
-                              controller.onboardingImages[index],
-                              key: ValueKey<int>(index), // Key to trigger the animation
-                            );
-                          },
-                        ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: screenHeight * 0.35,
+                      child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: controller.onboardingImages.length,
+                        onPageChanged: controller.onPageChanged,
+                        itemBuilder: (context, index) {
+                          return SvgPicture.asset(
+                            controller.onboardingImages[index],
+                            key: ValueKey<int>(index),
+                            width: screenWidth * 0.5,
+                            fit: BoxFit.contain,
+                          );
+                        },
                       ),
-                      const SizedBox(height: 40),
-                      // Heading text
-                      Obx(() => Text(
-                        controller.onBoardingTextsHeading[controller.currentIndex.value],
-                        key: ValueKey<int>(controller.currentIndex.value),
-                        style: Theme.of(context).textTheme.headlineLarge?.copyWith(fontWeight: FontWeight.bold),
-                      )),
-                      const SizedBox(height: 10),
-                      // Subheading text
-                      Obx(() => Text(
-                        controller.onBoardingTextsSubHeading1[controller.currentIndex.value],
-                        key: ValueKey<int>(controller.currentIndex.value),
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      )),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: screenHeight * 0.04),
+                    Padding(padding: EdgeInsets.symmetric(horizontal: screenWidth*0.06),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Obx(() => Text(
+                          controller.onBoardingTextsHeading[controller.currentIndex.value],
+                          key: ValueKey<int>(controller.currentIndex.value),
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineLarge
+                              ?.copyWith(fontWeight: FontWeight.bold, fontSize: screenWidth * 0.06),
+                        )),
+                        SizedBox(height: screenHeight * 0.01),
+                        Obx(() => Text(
+                          controller.onBoardingTextsSubHeading1[controller.currentIndex.value],
+                          key: ValueKey<int>(controller.currentIndex.value),
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: screenWidth * 0.045),
+                        )),
+                      ],
+                    ),)
+                  ],
                 ),
               ),
             ),
           ),
-          // Slide indicator image
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.1),
             child: Obx(() => SvgPicture.asset(
               key: ValueKey<int>(controller.currentIndex.value),
               controller.slideImages[controller.currentIndex.value],
+              height: screenHeight * 0.015,
+              fit: BoxFit.contain,
             )),
           ),
-          const SizedBox(height: 30),
-          // NEXT button
+          SizedBox(height: screenHeight * 0.03),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
             child: SizedBox(
               width: double.infinity,
-              height: 60,
+              height: screenHeight * 0.07,
               child: ElevatedButton(
                 onPressed: controller.nextImage,
                 child: Obx(() {
@@ -132,21 +129,24 @@ class OnBoardingScreen extends StatelessWidget {
                     controller.currentIndex.value == controller.onboardingImages.length - 1
                         ? 'Get Started'
                         : 'Next',
+                    style: TextStyle(fontSize: screenWidth * 0.045),
                   );
                 }),
               ),
             ),
           ),
-          // Skip button
           Padding(
-            padding: const EdgeInsets.only(bottom: 30),
+            padding: EdgeInsets.only(bottom: screenHeight * 0.03),
             child: GestureDetector(
               onTap: () {
                 Get.offNamed('/auth');
               },
               child: Text(
                 'Skip',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: Theme.of(context).primaryColor),
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(color: Theme.of(context).primaryColor, fontSize: screenWidth * 0.045),
               ),
             ),
           ),

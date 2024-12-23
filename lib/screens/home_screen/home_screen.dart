@@ -19,7 +19,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   final AuthService authService = AuthService();
   final ProductApi productApi = ProductApi();
 
@@ -42,78 +41,89 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 220,
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        backgroundColor: Colors.white,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Obx(() => Text(
-              'Hi, ${userController.user.value.name.split(' ')[0]}',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyLarge
-                  ?.copyWith(fontWeight: FontWeight.bold),
-            )),
-            const SizedBox(height: 5),
-            Obx(() => Text(
-              userController.userLocation.value,
-              style: Theme.of(context).textTheme.bodyMedium,
-              maxLines: 2, // Allow wrapping to the next line
-              overflow: TextOverflow.ellipsis, // Truncate if too long
-            )),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintText: 'Search for products...',
-                  prefixIcon: const Icon(Icons.search),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: const BorderSide(color: Colors.grey),
-                  ),
-                ),
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), color: Colors.amber[200],),
-              width: double.infinity,
-              padding:
-              const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Exclusive Offer! 50% OFF on your first order.',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  ),
-                  Icon(
-                    Icons.arrow_forward,
-                    color: Colors.black,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
       body: SingleChildScrollView(
         child: Obx(() {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth*0.045, vertical: screenWidth*0.1),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Obx(() => Text(
+                      'Hi, ${userController.user.value.name.split(' ')[0]}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    )),
+                    const SizedBox(height: 5),
+                    Obx(() => Text(
+                      userController.userLocation.value,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      maxLines: 2, // Allow wrapping to the next line
+                      overflow: TextOverflow.ellipsis, // Truncate if too long
+                    )),
+                    SizedBox(height: screenHeight*0.02),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: screenWidth * 0.004),
+                      child: SizedBox(
+                        height: screenWidth * 0.12,
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(vertical: screenWidth*0.01),
+                            hintText: 'Search...',
+                            prefixIcon: const Icon(Icons.search, size: 20),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                              borderSide: const BorderSide(color: Colors.grey),
+                            ),
+                          ),
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 14),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Offer banner
+              // Padding(
+              //   padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04, vertical: screenHeight*0.015),
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(8),
+              //       color: Colors.amber[200],
+              //     ),
+              //     width: double.infinity,
+              //     padding: EdgeInsets.symmetric(
+              //         vertical: screenWidth * 0.04,
+              //         horizontal: screenHeight * 0.02),
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //       children: [
+              //         Text(
+              //           'Exclusive Offer! 50% OFF on your first order.',
+              //           style: Theme.of(context)
+              //               .textTheme
+              //               .bodyMedium
+              //               ?.copyWith(fontWeight: FontWeight.bold),
+              //         ),
+              //         Icon(
+              //           Icons.arrow_forward,
+              //           color: Colors.black,
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               // Heading1
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 20.0),
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
                 child: Text(
                   'Shop by Categories',
                   style: Theme.of(context)
@@ -123,39 +133,45 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               // Heading2
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 4.0, horizontal: 20.0),
-                child: Text('Freshest fishes just for you and your family!'),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: screenWidth * 0.02,
+                    horizontal: screenWidth * 0.06),
+                child: Text('Freshest fishes just for you and your family!',
+                    style: Theme.of(context).textTheme.bodyMedium),
               ),
               const SizedBox(height: 8),
               // Scrollable Categories
               CategoriesSlideWidget(),
               // Best Sellers and Recommended
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
+                padding: EdgeInsets.symmetric(vertical: screenHeight*0.01),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // Best Seller option
                     InkWell(
                       onTap: () {
-                        homeController.changeSelectedOption(SelectedOptionState.bestSeller);
+                        homeController.changeSelectedOption(
+                            SelectedOptionState.bestSeller);
                       },
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
                             'Best Sellers',
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style:
+                                Theme.of(context).textTheme.bodyMedium
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                           ),
                           const SizedBox(height: 4),
                           Container(
                             height: 2,
                             width: 120, // Consistent width for underline
                             color: homeController.selectedOptionState.value ==
-                                SelectedOptionState.bestSeller
+                                    SelectedOptionState.bestSeller
                                 ? Colors.black
                                 : Colors.transparent,
                           ),
@@ -166,23 +182,25 @@ class _HomeScreenState extends State<HomeScreen> {
                     // Recommended option
                     InkWell(
                       onTap: () {
-                        homeController.changeSelectedOption(SelectedOptionState.recommended);
+                        homeController.changeSelectedOption(
+                            SelectedOptionState.recommended);
                       },
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
                             'Recommended',
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style:
+                                Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                           ),
                           const SizedBox(height: 4),
                           Container(
                             height: 2,
                             width: 120, // Consistent width for underline
                             color: homeController.selectedOptionState.value ==
-                                SelectedOptionState.recommended
+                                    SelectedOptionState.recommended
                                 ? Colors.black
                                 : Colors.transparent,
                           ),
@@ -202,7 +220,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               // Testimonials
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 20.0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 4.0, horizontal: 20.0),
                 child: Text(
                   'What our customers say',
                   style: Theme.of(context)
@@ -229,13 +248,22 @@ class _HomeScreenState extends State<HomeScreen> {
     return Obx(() {
       switch (homeController.selectedOptionState.value) {
         case SelectedOptionState.bestSeller:
-          return ProductsSlideWidget(categoryId: '67531a520fde5d5d4cc4065d', key: const ValueKey('bestSeller'), willRefresh: true,);
+          return ProductsSlideWidget(
+            categoryId: '67531a520fde5d5d4cc4065d',
+            key: const ValueKey('bestSeller'),
+            willRefresh: true,
+            context: context,
+          );
         case SelectedOptionState.recommended:
-          return ProductsSlideWidget(categoryId: '67531a520fde5d5d4cc4065d', key: const ValueKey('recommended'), willRefresh: true,);
+          return ProductsSlideWidget(
+            categoryId: '67531a520fde5d5d4cc4065d',
+            key: const ValueKey('recommended'),
+            willRefresh: true,
+            context: context,
+          );
         default:
           return const SizedBox.shrink();
       }
     });
   }
-
 }

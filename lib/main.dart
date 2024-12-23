@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       title: 'Puro Taja',
-      theme: AppTheme.lightTheme,
+      theme: AppTheme.lightTheme(context),
       initialRoute: '/splash',
       getPages: AppRoutes.routes,
     );
