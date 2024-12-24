@@ -13,9 +13,24 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen> {
   final categoryController = Get.put(CategoryController());
-  final productsController = Get.put(ProductsController());
+  final productsController = Get.find<ProductsController>();
 
   dynamic selectedCategoryIndex = 0.obs; // Manage selected index here
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Get the parameter or use default value 0
+    selectedCategoryIndex = int.tryParse(Get.parameters['selectedCategoryIndex'] ?? '0') ?? 0;
+
+    // Fetch products for the initially selected category
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      productsController.getAllProductsFromCategoryByCategoryId(
+        categoryController.categories[selectedCategoryIndex]['id'].toString(),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +150,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             child: Obx(() {
               if (productsController.isLoading.value) {
                 return GridSkeletonWidget();
-              } else if (productsController.products.isEmpty) {
+              } else if (productsController.productsByCategory.isEmpty) {
                 return const Center(
                   child: Text(
                     "No products available",
@@ -152,9 +167,9 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       mainAxisSpacing: 2.0, // Vertical spacing between items
                       childAspectRatio: 0.59, // Adjust card height-to-width ratio
                     ),
-                    itemCount: productsController.products.length,
+                    itemCount: productsController.productsByCategory.length,
                     itemBuilder: (context, index) {
-                      final product = productsController.products[index];
+                      final product = productsController.productsByCategory[index];
                       return GestureDetector(
                         onTap: () {
                           Get.toNamed('/product/${product['id']}');
@@ -175,16 +190,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                   ),
                                 ],
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(12.0),
-                                child: Expanded(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.network(
-                                      product['image'][0]['url'],
-                                      fit: BoxFit.fitWidth,
-                                    ),
-                                  ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(8),
+                                child: Image.network(
+                                  product['image'][0]['url'],
+                                  fit: BoxFit.fitWidth,
                                 ),
                               ),
                             ),

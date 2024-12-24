@@ -5,7 +5,7 @@ import '../controllers/products_controller.dart';
 class TestimonialsSlideWidget extends StatelessWidget {
   final double height;
   final int itemCount;
-  final productsController = Get.put(ProductsController());
+  final productsController = Get.find<ProductsController>();
 
   TestimonialsSlideWidget({
     super.key,

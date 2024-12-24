@@ -19,7 +19,7 @@ class _LogoutConfirmationState extends State<LogoutConfirmation> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      height: screenWidth*0.5, // Height of the bottom sheet
+      height: screenWidth*0.6, // Height of the bottom sheet
       width: double.infinity,
       padding: const EdgeInsets.all(16),
       child: Column(

@@ -68,12 +68,13 @@ class _AuthScreenState extends State<AuthScreen> {
                 padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05), // Dynamic padding
                 child: Column(
                   children: [
+                    SizedBox(height: 30,),
                     // The image of the logo
                     Padding(
-                      padding: EdgeInsets.symmetric(vertical: screenWidth*0.06),
+                      padding: EdgeInsets.symmetric(vertical: screenWidth*0.08),
                       child: Image.asset(
                         'assets/purotaja_logo.png',
-                        width: screenWidth * 0.5,
+                        width: screenWidth * 0.4,
                         fit: BoxFit.fitWidth,
                       ),
                     ),

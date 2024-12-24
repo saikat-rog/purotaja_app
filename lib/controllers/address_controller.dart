@@ -57,6 +57,7 @@ class AddressController extends GetxController {
       addresses.value = fetchedAddresses;
     } catch (e) {
       // Handle any errors (optional)
+      print(e);
       Get.snackbar("Error", "Failed to load addresses.");
     } finally {
       isLoading.value =

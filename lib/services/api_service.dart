@@ -321,5 +321,22 @@ class ProductApi {
     }
   }
 
+  Future<List<Map<String, dynamic>>> getAllProducts() async {
+    try {
+      Response response = await dio.get('${dotenv.env["API_URI"]}/${dotenv.env["STORE_ID"]}/products');
 
+      if (response.statusCode == 200) {
+        // Safely extract all products from the response
+        final products = response.data['products'] as List<dynamic>;
+        return products.map((product) => Map<String, dynamic>.from(product)).toList();
+      } else {
+        throw Exception("Failed to load all products.");
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print("Error fetching all products: $e");
+      }
+      return [];
+    }
+  }
 }

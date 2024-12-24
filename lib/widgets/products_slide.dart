@@ -7,14 +7,14 @@ class ProductsSlideWidget extends StatelessWidget {
   final String categoryId;
   final BuildContext context;
   final bool willRefresh; // New parameter to trigger a refresh
-  final productsController = Get.put(ProductsController());
+  final productsController = Get.find<ProductsController>();
 
   ProductsSlideWidget({
-    Key? key,
+    super.key,
     required this.categoryId, // Required parameter for dynamic products
     required this.context,
     required this.willRefresh, // Default is false, can be passed as true to refresh
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,12 +22,12 @@ class ProductsSlideWidget extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     // Trigger refresh if willRefresh is true
-    if (willRefresh || productsController.products.isEmpty) {
+    if (willRefresh || productsController.productsByCategory.isEmpty) {
       productsController.getAllProductsFromCategoryByCategoryId(categoryId);
     }
 
     return Obx(() {
-      final products = productsController.products;
+      final products = productsController.productsByCategory;
       final isLoading = productsController.isLoading.value;
 
       if (isLoading) {

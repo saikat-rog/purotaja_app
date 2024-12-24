@@ -13,7 +13,8 @@ class AddressScreen extends StatefulWidget {
 }
 
 class _AddressScreenState extends State<AddressScreen> {
-  final AddressController addressController = Get.put(AddressController());
+  final addressController = Get.put(AddressController());
+
 
   @override
   Widget build(BuildContext context) {

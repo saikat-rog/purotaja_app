@@ -20,6 +20,7 @@ import 'package:purotaja/screens/home_screen/home_screen.dart';
 import 'package:purotaja/screens/onboarding_screen.dart';
 import 'package:purotaja/screens/orders_screen/orders_screen.dart';
 import 'package:purotaja/screens/product_info_screen.dart';
+import 'package:purotaja/screens/search_screen.dart';
 import 'package:purotaja/screens/splash_screen.dart';
 
 class AppRoutes {
@@ -146,6 +147,12 @@ class AppRoutes {
       page: () => const AddAddressScreen(),
       transition: Transition.circularReveal,
       transitionDuration: const Duration(milliseconds: 300),
+    ),
+    GetPage(
+      name: '/search',
+      page: () => SearchScreen(),
+      transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 200),
     ),
   ];
 }

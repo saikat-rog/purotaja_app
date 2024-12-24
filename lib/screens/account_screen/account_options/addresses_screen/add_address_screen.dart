@@ -12,7 +12,7 @@ class AddAddressScreen extends StatefulWidget {
 }
 
 class _AddAddressScreenState extends State<AddAddressScreen> {
-  AddressController addressController = Get.put(AddressController());
+  final addressController = Get.find<AddressController>();
 
   final addressFieldController = TextEditingController();
   final streetController = TextEditingController();

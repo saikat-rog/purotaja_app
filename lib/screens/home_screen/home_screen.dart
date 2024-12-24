@@ -23,12 +23,11 @@ class _HomeScreenState extends State<HomeScreen> {
   final ProductApi productApi = ProductApi();
 
   final userController = Get.find<UserController>();
-  final categoryController = Get.put(CategoryController());
-  final productsController = Get.put(ProductsController());
+  final categoryController = Get.find<CategoryController>();
+  final productsController = Get.find<ProductsController>();
   final homeController = Get.put(HomeController());
 
   final InternalPermissions internalPermissions = InternalPermissions();
-  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -37,6 +36,12 @@ class _HomeScreenState extends State<HomeScreen> {
     Future.delayed(const Duration(seconds: 2), () {
       internalPermissions.checkLocationPermission();
     });
+  }
+
+  @override
+  void dispose() {
+    productsController.dispose();
+    super.dispose();
   }
 
   @override
@@ -54,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    // Hi Text
                     Obx(() => Text(
                       'Hi, ${userController.user.value.name.split(' ')[0]}',
                       style: Theme.of(context)
@@ -62,6 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ?.copyWith(fontWeight: FontWeight.bold),
                     )),
                     const SizedBox(height: 5),
+                    // Location
                     Obx(() => Text(
                       userController.userLocation.value,
                       style: Theme.of(context).textTheme.bodyMedium,
@@ -69,25 +76,33 @@ class _HomeScreenState extends State<HomeScreen> {
                       overflow: TextOverflow.ellipsis, // Truncate if too long
                     )),
                     SizedBox(height: screenHeight*0.02),
+                    //Search Box
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: screenWidth * 0.004),
-                      child: SizedBox(
-                        height: screenWidth * 0.12,
-                        child: TextField(
-                          controller: _searchController,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(vertical: screenWidth*0.01),
-                            hintText: 'Search...',
-                            prefixIcon: const Icon(Icons.search, size: 20),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(6.0),
-                              borderSide: const BorderSide(color: Colors.grey),
-                            ),
+                      child: InkWell(
+                        onTap: () {
+                          Get.toNamed('/search');
+                        },
+                        child: Container(
+                          height: screenWidth * 0.12,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6.0),
+                            border: Border.all(color: Colors.black87),
                           ),
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 14),
+                          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.search, size: 20),
+                              const SizedBox(width: 10),
+                              Text(
+                                'Search...',
+                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 14),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),

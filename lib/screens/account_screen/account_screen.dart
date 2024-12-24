@@ -205,14 +205,14 @@ class _AccountScreenState extends State<AccountScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Container(
-      height: screenWidth*0.1,
-      width: screenWidth*0.1,
+      height: screenWidth*0.09,
+      width: screenWidth*0.09,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: Colors.white,
       ),
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: EdgeInsets.all(screenWidth*0.02),
         child: SvgPicture.asset(iconPath),
       ),
     );

@@ -32,7 +32,7 @@ class AppTheme {
           color: const Color(0xFF32343E),
         ),
         headlineSmall: GoogleFonts.sen(
-          fontSize: responsiveFontSize(context, 0.04),
+          fontSize: responsiveFontSize(context, 0.05),
           color: const Color(0xFF32343E),
         ),
         bodyLarge: GoogleFonts.sen(

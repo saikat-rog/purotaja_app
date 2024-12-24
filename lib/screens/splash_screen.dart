@@ -8,7 +8,8 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 3),() async {
+    double screenWidth = MediaQuery.of(context).size.width;
+    Future.delayed(const Duration(seconds: 2),() async {
       final isAuthenticated = AuthService().getAuthenticationStatus();
       await isAuthenticated ? Get.offNamed('/') : Get.offNamed('/onboarding');
     });
@@ -22,7 +23,7 @@ class SplashScreen extends StatelessWidget {
             right: 0,
             child: SvgPicture.asset(
               'assets/ellipse_1006.svg',
-              height: 150,
+              height: screenWidth*0.32,
               fit: BoxFit.cover,
             ),
           ),
@@ -32,7 +33,7 @@ class SplashScreen extends StatelessWidget {
             left: 0,
             child: SvgPicture.asset(
               'assets/ellipse_1005.svg',
-              height: 150,
+              height: screenWidth*0.32,
               fit: BoxFit.cover,
             ),
           ),
@@ -44,6 +45,7 @@ class SplashScreen extends StatelessWidget {
               children: [
                 Image.asset(
                   'assets/purotaja_logo.png',
+                  height: screenWidth*0.3,
                 ),
               ],
             ),

@@ -14,7 +14,7 @@ class EditAddressScreen extends StatefulWidget {
 }
 
 class _EditAddressScreenState extends State<EditAddressScreen> {
-  final AddressController addressController = Get.put(AddressController());
+  final addressController = Get.find<AddressController>();
 
   final addressFieldController = TextEditingController();
   final streetController = TextEditingController();

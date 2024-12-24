@@ -18,6 +18,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
   Widget build(BuildContext context) {
     final productsController = Get.find<ProductsController>();
     final product = productsController.getProductById(widget.productId);
+    print(product);
 
     // Dropdown values
     List<int> quantityOptions = [1, 2, 3, 4, 5];
@@ -99,7 +100,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                       Row(
                         children: [
                           Text(
-                            '\u20B9${product['price'] - (product['discount'] ?? 0)}',
+                            '\u20B9${product['price'] - ((product['price']*product['discount'])/100)}',
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineMedium
