@@ -206,7 +206,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                   product['name'],
                                   style: Theme.of(context)
                                       .textTheme
-                                      .headlineSmall
+                                      .bodyLarge
                                       ?.copyWith(fontWeight: FontWeight.w600),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -226,7 +226,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                             Row(
                               children: [
                                 Text(
-                                  '\u20B9${product['price'] - (product['discount'] ?? 0)}',
+                                  '\u20B9${product['price'] - ((product['discount']*product['price'])/100 ?? 0)}',
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyLarge

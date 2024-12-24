@@ -30,19 +30,14 @@ class ProductsSlideWidget extends StatelessWidget {
       final products = productsController.productsByCategory;
       final isLoading = productsController.isLoading.value;
 
-      if (isLoading) {
-        // Display skeleton while fetching data
-        return RectangularContainerSkeletonPlaceholder(context: context);
-      }
+      // if (isLoading) {
+      //   // Display skeleton while fetching data
+      //   return RectangularContainerSkeletonPlaceholder(context: context);
+      // }
 
       if (products.isEmpty) {
         // Show empty state if no products are available
-        return Center(
-          child: Text(
-            'No products available.',
-            style: Theme.of(context).textTheme.bodyLarge,
-          ),
-        );
+        return RectangularContainerSkeletonPlaceholder(context: context);
       }
 
       // Render product list once data is fetched
@@ -61,6 +56,8 @@ class ProductsSlideWidget extends StatelessWidget {
                   onTap: () {
                     // Navigate to the product info page with the product id
                     Get.toNamed('/product/${product['id']}'); // Navigate using the product id
+                    // Get.toNamed('/product/675dc6eee898796fe6df63a4');
+                    // print(product['id']);
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +92,7 @@ class ProductsSlideWidget extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            '\u20B9${product['price'] - (product['discount'] ?? 0)}',
+                            '\u20B9${product['price'] - ((product['discount']*product['price'])/100 ?? 0)}',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge

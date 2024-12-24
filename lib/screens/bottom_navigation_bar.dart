@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:purotaja/screens/account_screen/account_screen.dart';
 import 'package:purotaja/screens/category_screen/category_screen.dart';
@@ -39,19 +40,19 @@ class BottomNavBar extends StatelessWidget {
         backgroundColor: Colors.white,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Image.asset('assets/home.png'),
+            icon: SvgPicture.asset('assets/home.svg'),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('assets/category.png'),
+            icon: SvgPicture.asset('assets/category.svg'),
             label: 'Category',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('assets/orders.png'),
+            icon: SvgPicture.asset('assets/orders.svg'),
             label: 'Orders',
           ),
           BottomNavigationBarItem(
-            icon: Image.asset('assets/profile.png'),
+            icon: SvgPicture.asset('assets/profile.svg'),
             label: 'Profile',
           ),
         ],

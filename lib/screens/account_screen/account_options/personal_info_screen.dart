@@ -20,15 +20,15 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   final userController = Get.find<UserController>();
   final List<Map<String, dynamic>> profileOptions = [
     {
-      "text": "FULL NAME",
+      "text": "Full Name",
       'icon':"assets/profile_assets/person.svg"
     },
     {
-      "text": "EMAIL",
+      "text": "Email",
       'icon':"assets/profile_assets/email.svg"
     },
     {
-      "text": "PHONE",
+      "text": "Phone",
       'icon':"assets/profile_assets/phone.svg"
     },
   ];
@@ -124,7 +124,7 @@ Widget _buildAccountOptionsList(List<Map<String, dynamic>> options) {
                 children: [
                   Text(
                     item['text'],
-                    style: Theme.of(context).textTheme.headlineSmall,
+                    style: Theme.of(context).textTheme.bodyLarge,
                   ),
                   index == 0 ?
                   Text(

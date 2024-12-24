@@ -78,10 +78,10 @@ flutter:
     - assets/slide3.svg
     - assets/location.png
     - assets/map_pin.png
-    - assets/home.png
-    - assets/orders.png
-    - assets/profile.png
-    - assets/category.png
+    - assets/home.svg
+    - assets/orders.svg
+    - assets/profile.svg
+    - assets/category.svg
     - assets/profile_assets/bag.svg
     - assets/profile_assets/bell.svg
     - assets/profile_assets/fav.svg
@@ -98,6 +98,11 @@ flutter:
     - assets/profile_assets/addresses/edit.svg
     - assets/profile_assets/addresses/delete.svg
     - assets/profile_assets/addresses/location.png
+
+  fonts:
+        - family: aeonik
+          fonts:
+            - asset: assets/fonts/AeonikRegular.ttf
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

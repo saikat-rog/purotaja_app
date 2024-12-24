@@ -99,13 +99,24 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                       // Price and Discount
                       Row(
                         children: [
-                          Text(
-                            '\u20B9${product['price'] - ((product['price']*product['discount'])/100)}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineMedium
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
+                      if ((product['discount'] ?? 0) > 0) ...[
+                        Text(
+                          '\u20B9${product['price'] - ((product['price']*product['discount'])/100)}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ]
+                      else ...[
+                        Text(
+                          '\u20B9${product['price']}',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headlineMedium
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ],
                           if ((product['discount'] ?? 0) > 0) ...[
                             const SizedBox(width: 8),
                             Text(
@@ -305,16 +316,30 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '\u20B9${product['price'] - product['discount']}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .headlineSmall
-                                ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.green,
-                                ),
-                          ),
+                          if ((product['discount'] ?? 0) > 0) ...[
+                            Text(
+                              '\u20B9${product['price'] - product['discount']}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
+                            ),
+                          ]
+                          else ...[
+                            Text(
+                              '\u20B9${product['price']}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall
+                                  ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
+                            ),
+                          ],
                           Text(
                               'MRP: \u20B9${product['price']} (Incl. of all taxes)',
                               style: Theme.of(context).textTheme.bodyMedium),

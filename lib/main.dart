@@ -5,18 +5,17 @@ import 'package:get/get.dart';
 import 'package:purotaja/app_routes.dart';
 import 'package:purotaja/controllers/category_controller.dart';
 import 'package:purotaja/controllers/products_controller.dart';
-import 'package:purotaja/widgets/top_banner.dart';
 
 import 'app_theme.dart';
-import 'controllers/address_controller.dart';
 import 'controllers/user_controller.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
   Get.put(UserController());
-  Get.put(TopBannerController());
-  Get.put(ProductsController());
-  Get.put(CategoryController());
+  // Get.put(TopBannerController());
+  Get.lazyPut(()=>CategoryController());
+  Get.lazyPut(()=>ProductsController());
+
   runApp(const MyApp());
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
