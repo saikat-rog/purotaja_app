@@ -7,7 +7,7 @@ class ProductsSlideWidget extends StatelessWidget {
   final String categoryId;
   final BuildContext context;
   final bool willRefresh; // New parameter to trigger a refresh
-  final productsController = Get.find<ProductsController>();
+  final productsController = Get.put(ProductsController());
 
   ProductsSlideWidget({
     super.key,
@@ -30,13 +30,8 @@ class ProductsSlideWidget extends StatelessWidget {
       final products = productsController.productsByCategory;
       final isLoading = productsController.isLoading.value;
 
-      // if (isLoading) {
-      //   // Display skeleton while fetching data
-      //   return RectangularContainerSkeletonPlaceholder(context: context);
-      // }
-
-      if (products.isEmpty) {
-        // Show empty state if no products are available
+      if (isLoading) {
+        // Display skeleton while fetching data
         return RectangularContainerSkeletonPlaceholder(context: context);
       }
 

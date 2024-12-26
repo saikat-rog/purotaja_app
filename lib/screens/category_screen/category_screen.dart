@@ -46,6 +46,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             ),
             GestureDetector(onTap:(){
               //searches
+              Get.toNamed('/search');
             }, child: Icon(Icons.search, size: screenWidth*0.07)),
           ],
         ),

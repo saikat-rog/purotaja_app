@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:purotaja/app_routes.dart';
+import 'package:purotaja/controllers/cart_controller.dart';
 import 'package:purotaja/controllers/category_controller.dart';
 import 'package:purotaja/controllers/products_controller.dart';
 
@@ -15,6 +16,7 @@ Future<void> main() async {
   // Get.put(TopBannerController());
   Get.lazyPut(()=>CategoryController());
   Get.lazyPut(()=>ProductsController());
+  Get.lazyPut(()=>CartController());
 
   runApp(const MyApp());
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(

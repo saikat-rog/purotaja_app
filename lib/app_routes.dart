@@ -14,7 +14,7 @@ import 'package:purotaja/screens/account_screen/account_options/reviews_screen.d
 import 'package:purotaja/screens/account_screen/account_screen.dart';
 import 'package:purotaja/screens/auth_screen.dart';
 import 'package:purotaja/screens/bottom_navigation_bar.dart';
-import 'package:purotaja/screens/cart_screen.dart';
+import 'package:purotaja/screens/cart_screen/cart_screen.dart';
 import 'package:purotaja/screens/category_screen/category_screen.dart';
 import 'package:purotaja/screens/home_screen/home_screen.dart';
 import 'package:purotaja/screens/onboarding_screen.dart';
@@ -78,12 +78,6 @@ class AppRoutes {
         page: () => const AccountScreen(),
         transition: Transition.circularReveal,
         transitionDuration: const Duration(milliseconds: 300)),
-    GetPage(
-      name: '/cart',
-      page: () => const CartScreen(),
-      transition: Transition.circularReveal,
-      transitionDuration: const Duration(milliseconds: 300),
-    ),
     GetPage(
       name: '/personalInfo',
       page: () => const PersonalInfoScreen(),
@@ -152,6 +146,12 @@ class AppRoutes {
       name: '/search',
       page: () => SearchScreen(),
       transition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 200),
+    ),
+    GetPage(
+      name: '/cart',
+      page: () => CartScreen(),
+      transition: Transition.downToUp,
       transitionDuration: const Duration(milliseconds: 200),
     ),
   ];

@@ -98,6 +98,7 @@ flutter:
     - assets/profile_assets/addresses/edit.svg
     - assets/profile_assets/addresses/delete.svg
     - assets/profile_assets/addresses/location.png
+    - assets/cart_assets/empty_cart.svg
 
   fonts:
         - family: aeonik

@@ -29,7 +29,6 @@ class ProductsController extends GetxController {
       // Check if data is not empty
       if (fetchedProducts.isNotEmpty) {
         productsByCategory.assignAll(fetchedProducts); // Update products list
-        print(productsByCategory);
       } else {
         errorMessage.value = "No products found for this category.";
         productsByCategory.clear();

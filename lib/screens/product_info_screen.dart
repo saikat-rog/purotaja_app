@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dropdown_button2/dropdown_button2.dart'; // Import the package
+import '../controllers/cart_controller.dart';
 import '../controllers/products_controller.dart';
 import '../widgets/products_slide.dart';
 
@@ -17,8 +18,8 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
   @override
   Widget build(BuildContext context) {
     final productsController = Get.find<ProductsController>();
+    final cartController = Get.put(CartController());
     final product = productsController.getProductById(widget.productId);
-    print(product);
 
     // Dropdown values
     List<int> quantityOptions = [1, 2, 3, 4, 5];
@@ -36,6 +37,8 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
     Rx<String> selectedCutType = cutTypeOptions.isNotEmpty
         ? Rx<String>(cutTypeOptions[0])
         : Rx<String>('No options available');
+
+    Rx<int> selectedCutTypeIndex = 0.obs;
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -66,11 +69,13 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                     ],
                   ),
                 ),
+                //Product Info
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // Image
                       Container(
                         width: double.infinity,
                         height: screenHeight * 0.3,
@@ -218,6 +223,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                                     ? (String? newValue) {
                                         if (newValue != null) {
                                           selectedCutType.value = newValue;
+                                          selectedCutTypeIndex.value = cutTypeOptions.indexOf(newValue);
                                         }
                                       }
                                     : null,
@@ -309,10 +315,11 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Price info on the left side
+                  // Price info on the left side and add to cart button on the right
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      //Price
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -345,39 +352,46 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                               style: Theme.of(context).textTheme.bodyMedium),
                         ],
                       ),
+                      //Add to cart button
                       ElevatedButton(
                         onPressed: () {
-                          // Add to cart functionality goes here
+                          // Access values using .value
+                          Map<String, dynamic> currentItem = {
+                            'id': product['id'],
+                            'subcategory': (product['subcategories'] != null && product['subcategories'].isNotEmpty && selectedCutTypeIndex.value < product['subcategories'].length)
+                                ? product['subcategories'][selectedCutTypeIndex.value]['id']
+                                : '',
+                            'quantity': selectedQuantity.value,
+                          };
+
+                          cartController.addToCart(currentItem);
+                          print(cartController.cartItems);
                         },
                         style: ElevatedButton.styleFrom(
-                          minimumSize:
-                              Size(screenWidth * 0.04, screenWidth * 0.1),
+                          minimumSize: Size(screenWidth * 0.04, screenWidth * 0.1),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           ),
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment
-                              .center, // Center content horizontally
-                          crossAxisAlignment: CrossAxisAlignment
-                              .center, // Center content vertically
+                          mainAxisAlignment: MainAxisAlignment.center, // Center content horizontally
+                          crossAxisAlignment: CrossAxisAlignment.center, // Center content vertically
                           children: [
                             Text('Add',
                                 style: Theme.of(context)
                                     .textTheme
                                     .headlineSmall
                                     ?.copyWith(color: Colors.white)),
-                            SizedBox(
-                                width:
-                                    8), // Reduced spacing for better alignment
+                            SizedBox(width: 8), // Reduced spacing for better alignment
                             Icon(
                               Icons.add,
                               color: Colors.white,
-                              size: screenWidth*0.05, // Adjust size to match the text
+                              size: screenWidth * 0.05, // Adjust size to match the text
                             ),
                           ],
                         ),
                       ),
+
                     ],
                   ),
                   // MRP info below price

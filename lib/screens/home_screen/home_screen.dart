@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:purotaja/controllers/home_controller.dart';
 import 'package:purotaja/services/api_service.dart';
+import '../../app_theme.dart';
 import '../../controllers/category_controller.dart';
 import '../../controllers/products_controller.dart';
 import '../../controllers/user_controller.dart';
@@ -39,15 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  void dispose() {
-    productsController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       body: SingleChildScrollView(
         child: Obx(() {
@@ -75,33 +69,37 @@ class _HomeScreenState extends State<HomeScreen> {
                       maxLines: 2, // Allow wrapping to the next line
                       overflow: TextOverflow.ellipsis, // Truncate if too long
                     )),
-                    SizedBox(height: screenHeight*0.02),
+                    SizedBox(height: screenWidth*0.04),
                     //Search Box
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: screenWidth * 0.004),
-                      child: InkWell(
-                        onTap: () {
-                          Get.toNamed('/search');
-                        },
-                        child: Container(
-                          height: screenWidth * 0.12,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6.0),
-                            border: Border.all(color: Colors.black87),
-                          ),
-                          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
-                          child: Row(
-                            children: [
-                              const Icon(Icons.search, size: 20),
-                              const SizedBox(width: 10),
-                              Text(
-                                'Search...',
-                                style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 14),
-                              ),
-                            ],
-                          ),
+                    InkWell(
+                      onTap: () {
+                        Get.toNamed('/search');
+                      },
+                      child: Container(
+                        height: screenWidth * 0.12,
+                        decoration: BoxDecoration(
+                          color: AppTheme.bgGrey,
+                          borderRadius: BorderRadius.circular(15)
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.04),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.search, size: 20),
+                            const SizedBox(width: 10),
+                            Text(
+                              'Search...',
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 14),
+                            ),
+                          ],
                         ),
                       ),
+                    ),
+                    //Cart button text
+                    GestureDetector(
+                      onTap: (){
+                        Get.toNamed('/cart');
+                      },
+                      child: Text('Cart', style: Theme.of(context).textTheme.bodyLarge,),
                     )
                   ],
                 ),
@@ -160,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
               CategoriesSlideWidget(),
               // Best Sellers and Recommended
               Padding(
-                padding: EdgeInsets.symmetric(vertical: screenHeight*0.01),
+                padding: EdgeInsets.symmetric(vertical: 30),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
