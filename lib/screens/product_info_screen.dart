@@ -325,7 +325,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                         children: [
                           if ((product['discount'] ?? 0) > 0) ...[
                             Text(
-                              '\u20B9${product['price'] - product['discount']}',
+                              '\u20B9${product['price'] - (product['price']*product['discount']/100)}',
                               style: Theme.of(context)
                                   .textTheme
                                   .headlineSmall

@@ -62,7 +62,6 @@ class ProductsSlideWidget extends StatelessWidget {
                         height: screenWidth*0.3,
                         decoration: const BoxDecoration(
                           shape: BoxShape.rectangle,
-                          color: Colors.black12,
                         ),
                         child: product['image'] != null && product['image'].isNotEmpty
                             ? Image.network(
