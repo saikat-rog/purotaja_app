@@ -13,7 +13,6 @@ import 'controllers/user_controller.dart';
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
   Get.put(UserController());
-  // Get.put(TopBannerController());
   Get.lazyPut(()=>CategoryController());
   Get.lazyPut(()=>ProductsController());
   Get.lazyPut(()=>CartController());

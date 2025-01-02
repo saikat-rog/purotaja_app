@@ -76,30 +76,31 @@ class _AccountScreenState extends State<AccountScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
+      appBar: AppBar(
+        scrolledUnderElevation: 0,
+        backgroundColor: Colors.white,
+        toolbarHeight: 150,
+        title: // Name and Photo container
+        _buildUserInfo(context),
+      ),
       body: Center(
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 100.0),
-              child: Column(
-                children: [
-                  // Name and Photo container
-                  _buildUserInfo(context),
-                  const SizedBox(height: 20),
-                  // Account Options List1
-                  _buildAccountOptionsList(accountsOption1, context),
-                  const SizedBox(height: 20),
-                  // Account Options List2
-                  _buildAccountOptionsList(accountsOption2, context),
-                  const SizedBox(height: 20),
-                  // Account Options List3
-                  _buildAccountOptionsList(accountsOption3, context),
-                  const SizedBox(height: 20),
-                  // Account Options List4 (Logout)
-                  _buildAccountOptionsList(accountsOption4, context),
-                ],
-              ),
+            child: Column(
+              children: [
+                // Account Options List1
+                _buildAccountOptionsList(accountsOption1, context),
+                const SizedBox(height: 20),
+                // Account Options List2
+                _buildAccountOptionsList(accountsOption2, context),
+                const SizedBox(height: 20),
+                // Account Options List3
+                _buildAccountOptionsList(accountsOption3, context),
+                const SizedBox(height: 20),
+                // Account Options List4 (Logout)
+                _buildAccountOptionsList(accountsOption4, context),
+              ],
             ),
           ),
         ),
@@ -110,7 +111,6 @@ class _AccountScreenState extends State<AccountScreen> {
   // Builds user info section (Name and Photo)
   Widget _buildUserInfo(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     return Container(
       width: double.infinity,
       child: Row(
@@ -119,7 +119,7 @@ class _AccountScreenState extends State<AccountScreen> {
           Container(
             child: Icon(
               Icons.person,
-              size: screenHeight*0.1,
+              size: 80,
               color: Colors.black12,
             ),
           ),
@@ -153,14 +153,13 @@ class _AccountScreenState extends State<AccountScreen> {
   // Builds a list of account options
   Widget _buildAccountOptionsList(List<Map<String, dynamic>> options, BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         color: AppTheme.bgGrey,
       ),
       child: ListView.builder(
-        padding: EdgeInsets.symmetric(vertical: screenHeight*0.01),
+        padding: EdgeInsets.symmetric(vertical: 15),
         shrinkWrap: true, // Ensures the ListView fits inside the parent
         physics: const NeverScrollableScrollPhysics(), // Prevents internal scrolling
         itemCount: options.length,
@@ -198,7 +197,6 @@ class _AccountScreenState extends State<AccountScreen> {
       ),
     );
   }
-
 
   // Builds the icon for each account option
   Widget _buildOptionIcon(String iconPath, BuildContext context) {

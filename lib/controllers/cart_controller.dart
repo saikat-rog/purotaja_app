@@ -28,7 +28,6 @@ class CartController extends GetxController {
     await _saveCartItems(); // Save cart items to SharedPreferences
   }
 
-
   // Method to edit a cart item
   void editCartItem(int index, String key, dynamic newValue) async {
     if (index >= 0 && index < cartItems.length) {

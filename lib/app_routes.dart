@@ -45,7 +45,7 @@ class AppRoutes {
     ),
     GetPage(
       name: '/',
-      page: () => const BottomNavBar(),
+      page: () => BottomNavBar(),
       transition: Transition.circularReveal,
       transitionDuration: const Duration(milliseconds: 300),
     ),
