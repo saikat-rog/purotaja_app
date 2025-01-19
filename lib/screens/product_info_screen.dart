@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:dropdown_button2/dropdown_button2.dart'; // Import the package
 import 'package:purotaja/utils/toast_message.dart';
 import 'package:purotaja/widgets/view_cart.dart';
-import '../app_theme.dart';
 import '../controllers/cart_controller.dart';
 import '../controllers/products_controller.dart';
 import '../widgets/products_slide.dart';
@@ -168,7 +165,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                               SizedBox(height: screenHeight * 0.02),
                               Obx(() {
                                 return DropdownButton2<int>(
-                                  underline: SizedBox.shrink(),
+                                  underline: const SizedBox.shrink(),
                                   value: selectedQuantity.value,
                                   onChanged: (int? newValue) {
                                     if (newValue != null) {
@@ -187,7 +184,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                                           ))
                                       .toList(),
                                   buttonStyleData: ButtonStyleData(
-                                    height: screenHeight * 0.05,
+                                    height: 50,
                                     width: screenWidth * 0.2,
                                     padding:
                                         EdgeInsets.all(screenWidth * 0.015),
@@ -206,6 +203,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                               }),
                             ],
                           ),
+                          SizedBox(width: screenWidth*0.05,),
                           // Dropdown for Cut Type
                           product['subcategories'].length > 0
                               ? Column(
@@ -252,8 +250,8 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                                               }).toList()
                                             : null,
                                         buttonStyleData: ButtonStyleData(
-                                          height: screenHeight * 0.06,
-                                          width: screenWidth * 0.3,
+                                          height: 50,
+                                          width: screenWidth * 0.5,
                                           padding: EdgeInsets.all(
                                               screenWidth * 0.015),
                                           decoration: BoxDecoration(
@@ -274,7 +272,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                                     }),
                                   ],
                                 )
-                              : SizedBox.shrink(),
+                              : const SizedBox.shrink(),
                         ],
                       ),
                       const SizedBox(height: 40),
@@ -313,7 +311,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                   willRefresh: false,
                   context: context,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 200,
                 ),
               ],

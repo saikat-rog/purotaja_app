@@ -224,35 +224,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                               softWrap: true,
                             ),
                             // Product Price
-                            Row(
-                              children: [
-                                Text(
-                                  '\u20B9${product['price'] - ((product['discount']*product['price'])/100 ?? 0)}',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                if ((product['discount'] ?? 0) > 0) ...[
-                                  SizedBox(width: screenWidth*0.01),
-                                  Text(
-                                    '\u20B9${product['price']}',
-                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                      decoration: TextDecoration.lineThrough,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                  SizedBox(width: screenWidth*0.01),
-                                  Text(
-                                    '${product['discount']}% off',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium
-                                        ?.copyWith(color: Colors.red),
-                                  ),
-                                ],
-                              ],
-                            ),
+                            Text(product['perunitprice'].toString())
                           ],
                         ),
                       );

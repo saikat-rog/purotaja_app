@@ -125,8 +125,6 @@ class AppRoutes {
       page: () => ProductInfoScreen(
         productId: Get.parameters['productId']!,
       ),
-      transition: Transition.circularReveal,
-      transitionDuration: const Duration(milliseconds: 300),
     ),
     GetPage(
       name: '/editAddress/:addressId',
