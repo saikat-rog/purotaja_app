@@ -1,4 +1,4 @@
 # purotaja-app
 
-An ecommerce app, sells fishes to local areas.
+An ecommerce Flutter app, sells fishes to local areas.
 
